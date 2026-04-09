@@ -1,0 +1,175 @@
+# Postlaa - Production Docker Compose
+# For: Internal team use (~5 members)
+# Domain: posts.aitoolsfactory.com
+#
+# BEFORE DEPLOYING - change these 3 values:
+#   1. TRAEFIK_CERTRESOLVER  → your Traefik certresolver name (check your traefik config, commonly "letsencrypt" or "le")
+#   2. JWT_SECRET            → already set to a secure random value below, but you can change it
+#   3. DB_PASSWORD           → already set below, change if you want a different one
+#
+# HOW TO DEPLOY on Hostinger:
+#   1. Open Docker Manager → Compose → paste this file
+#   2. Click Deploy
+#   3. After first boot, register at https://posts.aitoolsfactory.com/auth
+#   4. Then run the SQL below to make your account SuperAdmin:
+#
+#   docker exec -i postlaa-postgres psql -U postiz -d postiz_db << 'EOF'
+#   UPDATE "User" SET "isSuperAdmin" = true WHERE email = 'your@email.com';
+#   EOF
+
+services:
+
+  # ─────────────────────────────────────────────
+  # Main App (Frontend + Backend + Nginx in one)
+  # ─────────────────────────────────────────────
+  postlaa:
+    image: ghcr.io/gitroomhq/postiz-app:latest
+    container_name: postlaa
+    restart: unless-stopped
+    # This command writes all Docker env vars to /app/.env before starting
+    # so dotenv-cli inside PM2 startup scripts can find the file
+    command: sh -c "printenv > /app/.env && nginx && pnpm run pm2"
+    environment:
+      # === URLs (update domain if you change it)
+      MAIN_URL: 'https://posts.aitoolsfactory.com'
+      FRONTEND_URL: 'https://posts.aitoolsfactory.com'
+      NEXT_PUBLIC_BACKEND_URL: 'https://posts.aitoolsfactory.com/api'
+      BACKEND_INTERNAL_URL: 'http://localhost:3000'
+
+      # === Database & Cache
+      DATABASE_URL: 'postgresql://postiz:Postlaa@Secure2026!@postlaa-postgres:5432/postiz_db'
+      REDIS_URL: 'redis://postlaa-redis:6379'
+
+      # === Security (change JWT_SECRET if you want your own)
+      JWT_SECRET: 'Postlaa$JWT#Secret2026!XkQ9mPvRnLwZbYcFdHjAeUiOsTgN'
+
+      # === Temporal (background job scheduler for post delivery)
+      TEMPORAL_ADDRESS: 'temporal:7233'
+
+      # === Storage
+      STORAGE_PROVIDER: 'local'
+      UPLOAD_DIRECTORY: '/uploads'
+      NEXT_PUBLIC_UPLOAD_DIRECTORY: '/uploads'
+
+      # === App Settings
+      IS_GENERAL: 'true'
+      DISABLE_REGISTRATION: 'false'
+      NX_ADD_PLUGINS: 'false'
+
+      # === Optional: Add social API keys here when ready
+      # X_API_KEY: ''
+      # X_API_SECRET: ''
+      # LINKEDIN_CLIENT_ID: ''
+      # LINKEDIN_CLIENT_SECRET: ''
+      # FACEBOOK_APP_ID: ''
+      # FACEBOOK_APP_SECRET: ''
+      # YOUTUBE_CLIENT_ID: ''
+      # YOUTUBE_CLIENT_SECRET: ''
+      # OPENAI_API_KEY: ''
+
+    volumes:
+      - postlaa-uploads:/uploads/
+    networks:
+      - postlaa-internal
+      - traefik
+    depends_on:
+      postlaa-postgres:
+        condition: service_healthy
+      postlaa-redis:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.postlaa.rule=Host(`posts.aitoolsfactory.com`)"
+      - "traefik.http.routers.postlaa.entrypoints=websecure"
+      - "traefik.http.routers.postlaa.tls=true"
+      - "traefik.http.routers.postlaa.tls.certresolver=letsencrypt"
+      - "traefik.http.services.postlaa.loadbalancer.server.port=5000"
+      # HTTP → HTTPS redirect
+      - "traefik.http.routers.postlaa-http.rule=Host(`posts.aitoolsfactory.com`)"
+      - "traefik.http.routers.postlaa-http.entrypoints=web"
+      - "traefik.http.routers.postlaa-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+
+  # ─────────────────────────────────────────────
+  # PostgreSQL Database
+  # ─────────────────────────────────────────────
+  postlaa-postgres:
+    image: postgres:17-alpine
+    container_name: postlaa-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: 'Postlaa@Secure2026!'
+      POSTGRES_USER: postiz
+      POSTGRES_DB: postiz_db
+    volumes:
+      - postlaa-postgres-data:/var/lib/postgresql/data
+    networks:
+      - postlaa-internal
+    healthcheck:
+      test: pg_isready -U postiz -d postiz_db
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # ─────────────────────────────────────────────
+  # Redis Cache & Queue
+  # ─────────────────────────────────────────────
+  postlaa-redis:
+    image: redis:7.2-alpine
+    container_name: postlaa-redis
+    restart: unless-stopped
+    healthcheck:
+      test: redis-cli ping
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - postlaa-redis-data:/data
+    networks:
+      - postlaa-internal
+
+  # ─────────────────────────────────────────────
+  # Temporal Database (separate from app DB)
+  # ─────────────────────────────────────────────
+  temporal-postgres:
+    image: postgres:16-alpine
+    container_name: temporal-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: temporal_password
+      POSTGRES_USER: temporal
+    volumes:
+      - temporal-postgres-data:/var/lib/postgresql/data
+    networks:
+      - postlaa-internal
+
+  # ─────────────────────────────────────────────
+  # Temporal Workflow Engine (post scheduling)
+  # ─────────────────────────────────────────────
+  temporal:
+    image: temporalio/auto-setup:1.28.1
+    container_name: temporal
+    restart: unless-stopped
+    environment:
+      - DB=postgres12
+      - DB_PORT=5432
+      - POSTGRES_USER=temporal
+      - POSTGRES_PWD=temporal_password
+      - POSTGRES_SEEDS=temporal-postgres
+      - TEMPORAL_NAMESPACE=default
+    depends_on:
+      - temporal-postgres
+    networks:
+      - postlaa-internal
+
+volumes:
+  postlaa-postgres-data:
+  postlaa-redis-data:
+  postlaa-uploads:
+  temporal-postgres-data:
+
+networks:
+  postlaa-internal:
+    driver: bridge
+  traefik:
+    external: true
