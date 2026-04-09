@@ -37,11 +37,11 @@ services:
       BACKEND_INTERNAL_URL: 'http://localhost:3000'
 
       # === Database & Cache
-      DATABASE_URL: 'postgresql://postiz:Postlaa@Secure2026!@postlaa-postgres:5432/postiz_db'
+      DATABASE_URL: 'postgresql://postiz:PostlaaSecure2026@postlaa-postgres:5432/postiz_db'
       REDIS_URL: 'redis://postlaa-redis:6379'
 
       # === Security (change JWT_SECRET if you want your own)
-      JWT_SECRET: 'Postlaa$JWT#Secret2026!XkQ9mPvRnLwZbYcFdHjAeUiOsTgN'
+      JWT_SECRET: 'PostlaaJWTSecret2026XkQ9mPvRnLwZbYcFdHjAeUiOsTgN'
 
       # === Temporal (background job scheduler for post delivery)
       TEMPORAL_ADDRESS: 'temporal:7233'
@@ -98,7 +98,7 @@ services:
     container_name: postlaa-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_PASSWORD: 'Postlaa@Secure2026!'
+      POSTGRES_PASSWORD: 'PostlaaSecure2026'
       POSTGRES_USER: postiz
       POSTGRES_DB: postiz_db
     volumes:
@@ -159,6 +159,8 @@ services:
       - TEMPORAL_NAMESPACE=default
     depends_on:
       - temporal-postgres
+    volumes:
+      - ./dynamicconfig:/etc/temporal/config/dynamicconfig
     networks:
       - postlaa-internal
 
