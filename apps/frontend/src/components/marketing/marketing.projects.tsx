@@ -44,6 +44,14 @@ const useProjects = () => {
   });
 };
 
+const useCampaigns = (projectId: string) => {
+  const fetch = useFetch();
+  return useSWR<Campaign[]>(`campaigns-${projectId}`, async () => {
+    const res = await fetch(`/marketing/projects/${projectId}/campaigns`);
+    return res.json();
+  });
+};
+
 // ─── Status Badge ─────────────────────────────────────────────────────────────
 
 const statusColors: Record<Campaign['status'], string> = {
@@ -89,8 +97,15 @@ const ProjectWizard: FC<{
     goals: existing?.goals ?? '',
   });
 
-  const set = (key: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setForm((f) => ({ ...f, [key]: e.target.value }));
+  const setInput =
+    (key: string) =>
+    (e: React.ChangeEvent<HTMLInputElement>) =>
+      setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  const setText =
+    (key: string) =>
+    (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+      setForm((f) => ({ ...f, [key]: e.target.value }));
 
   const steps = [
     {
@@ -99,23 +114,26 @@ const ProjectWizard: FC<{
       fields: (
         <div className="flex flex-col gap-4">
           <Input
+            name="name"
             label="Project / Brand Name"
             placeholder="e.g. FitFlow App"
             value={form.name}
-            onChange={set('name')}
+            onChange={setInput('name')}
           />
           <Input
+            name="url"
             label="Website or App URL"
             placeholder="https://yourapp.com"
             value={form.url}
-            onChange={set('url')}
+            onChange={setInput('url')}
           />
           <Textarea
+            name="description"
             label="What does your product do? (3-5 sentences)"
             placeholder="FitFlow is a fitness app for busy professionals. It offers 15-minute HIIT workouts..."
             value={form.description}
-            onChange={set('description')}
-            rows={4}
+            onChange={setText('description')}
+
           />
         </div>
       ),
@@ -127,24 +145,27 @@ const ProjectWizard: FC<{
       fields: (
         <div className="flex flex-col gap-4">
           <Input
+            name="niche"
             label="Niche / Industry"
             placeholder="e.g. Health & Fitness, B2B SaaS, E-commerce Fashion"
             value={form.niche}
-            onChange={set('niche')}
+            onChange={setInput('niche')}
           />
           <Textarea
+            name="targetAudience"
             label="Target Audience"
-            placeholder="e.g. Busy professionals aged 28-40, mostly in the US, who want to stay fit without gym membership. They follow productivity influencers on LinkedIn and Instagram."
+            placeholder="e.g. Busy professionals aged 28-40, mostly in the US, who want to stay fit without gym membership."
             value={form.targetAudience ?? ''}
-            onChange={set('targetAudience')}
-            rows={4}
+            onChange={setText('targetAudience')}
+
           />
           <Textarea
+            name="competitors"
             label="Competitors (optional)"
             placeholder="List 2-5 competitor brands so the AI can find content gaps"
             value={form.competitors ?? ''}
-            onChange={set('competitors')}
-            rows={3}
+            onChange={setText('competitors')}
+
           />
         </div>
       ),
@@ -156,24 +177,27 @@ const ProjectWizard: FC<{
       fields: (
         <div className="flex flex-col gap-4">
           <Textarea
+            name="brandVoice"
             label="Brand Voice & Tone"
-            placeholder="e.g. Professional but approachable. Motivational without being preachy. We use plain English, no corporate jargon. Slightly humorous."
+            placeholder="e.g. Professional but approachable. Motivational without being preachy. Plain English, no jargon."
             value={form.brandVoice ?? ''}
-            onChange={set('brandVoice')}
-            rows={3}
+            onChange={setText('brandVoice')}
+
           />
           <Input
+            name="brandColors"
             label="Brand Colors (optional)"
             placeholder="e.g. Primary: #6C2BD9 purple, Secondary: white"
             value={form.brandColors ?? ''}
-            onChange={set('brandColors')}
+            onChange={setInput('brandColors')}
           />
           <Textarea
+            name="goals"
             label="Marketing Goals"
-            placeholder="e.g. Drive 500 app downloads/month. Build thought leadership on LinkedIn. Grow Instagram to 10k followers in 6 months."
+            placeholder="e.g. Drive 500 app downloads/month. Grow Instagram to 10k followers in 6 months."
             value={form.goals ?? ''}
-            onChange={set('goals')}
-            rows={3}
+            onChange={setText('goals')}
+
           />
         </div>
       ),
@@ -185,7 +209,9 @@ const ProjectWizard: FC<{
     setLoading(true);
     try {
       const res = await fetch(
-        existing ? `/marketing/projects/${existing.id}` : '/marketing/projects',
+        existing
+          ? `/marketing/projects/${existing.id}`
+          : '/marketing/projects',
         {
           method: existing ? 'PUT' : 'POST',
           body: JSON.stringify(form),
@@ -194,12 +220,14 @@ const ProjectWizard: FC<{
       if (!res.ok) throw new Error('Failed to save');
       await mutate('marketing-projects');
       toaster.show(
-        existing ? 'Project updated!' : `Project "${form.name}" created! The AI is ready to plan your marketing.`,
+        existing
+          ? 'Project updated!'
+          : `Project "${form.name}" created! The AI is ready to plan your marketing.`,
         'success'
       );
       onClose();
     } catch {
-      toaster.show('Failed to save project. Please try again.', 'error');
+      toaster.show('Failed to save project. Please try again.', 'warning');
     } finally {
       setLoading(false);
     }
@@ -216,23 +244,29 @@ const ProjectWizard: FC<{
             <div
               className={clsx(
                 'h-1 rounded-full transition-colors',
-                i <= step ? 'bg-[var(--new-btn-primary)]' : 'bg-[var(--new-sep)]'
+                i <= step
+                  ? 'bg-[var(--new-btn-primary)]'
+                  : 'bg-[var(--new-sep)]'
               )}
             />
-            <span className="text-xs text-[var(--new-textItemBlur)]">{s.title}</span>
+            <span className="text-xs text-[var(--new-textItemBlur)]">
+              {s.title}
+            </span>
           </div>
         ))}
       </div>
 
-      {/* Current Step */}
       <div>
-        <h3 className="text-lg font-semibold text-[rgb(var(--new-textColor))]">{current.title}</h3>
-        <p className="text-sm text-[var(--new-textItemBlur)] mt-1">{current.subtitle}</p>
+        <h3 className="text-lg font-semibold text-[rgb(var(--new-textColor))]">
+          {current.title}
+        </h3>
+        <p className="text-sm text-[var(--new-textItemBlur)] mt-1">
+          {current.subtitle}
+        </p>
       </div>
 
       <div>{current.fields}</div>
 
-      {/* Navigation */}
       <div className="flex justify-between gap-3 pt-2">
         <Button
           className="flex-1"
@@ -250,11 +284,7 @@ const ProjectWizard: FC<{
             Next
           </Button>
         ) : (
-          <Button
-            className="flex-1"
-            loading={loading}
-            onClick={handleSave}
-          >
+          <Button className="flex-1" loading={loading} onClick={handleSave}>
             {existing ? 'Save Changes' : 'Create Project'}
           </Button>
         )}
@@ -263,177 +293,7 @@ const ProjectWizard: FC<{
   );
 };
 
-// ─── Project Card ─────────────────────────────────────────────────────────────
-
-const ProjectCard: FC<{ project: MarketingProject; onSelect: () => void; onEdit: () => void }> = ({
-  project,
-  onSelect,
-  onEdit,
-}) => {
-  const fetch = useFetch();
-  const { mutate } = useSWRConfig();
-  const toaster = useToaster();
-
-  const handleDelete = useCallback(
-    async (e: React.MouseEvent) => {
-      e.stopPropagation();
-      if (!confirm(`Delete project "${project.name}"? This cannot be undone.`)) return;
-      await fetch(`/marketing/projects/${project.id}`, { method: 'DELETE' });
-      await mutate('marketing-projects');
-      toaster.show('Project deleted', 'success');
-    },
-    [project, fetch, mutate, toaster]
-  );
-
-  const activeCampaigns = project.campaigns.filter((c) => c.status === 'ACTIVE').length;
-
-  return (
-    <div
-      className="bg-[var(--new-bgColorInner)] border border-[var(--new-border)] rounded-xl p-5 flex flex-col gap-3 cursor-pointer hover:border-[var(--new-btn-primary)] transition-colors"
-      onClick={onSelect}
-    >
-      <div className="flex justify-between items-start">
-        <div className="flex flex-col gap-1">
-          <h3 className="font-semibold text-[rgb(var(--new-textColor))]">{project.name}</h3>
-          <a
-            href={project.url}
-            target="_blank"
-            rel="noreferrer"
-            className="text-xs text-[var(--new-textItemBlur)] hover:text-[var(--new-btn-primary)] transition-colors"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {project.url}
-          </a>
-        </div>
-        <div className="flex gap-2">
-          <button
-            className="text-xs px-2 py-1 rounded bg-[var(--new-btn-simple)] text-[var(--new-btn-text)] hover:opacity-80 transition-opacity"
-            onClick={(e) => { e.stopPropagation(); onEdit(); }}
-          >
-            Edit
-          </button>
-          <button
-            className="text-xs px-2 py-1 rounded bg-red-500/20 text-red-400 hover:opacity-80 transition-opacity"
-            onClick={handleDelete}
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-
-      <p className="text-sm text-[var(--new-textItemBlur)] line-clamp-2">{project.description}</p>
-
-      <div className="flex gap-2 flex-wrap">
-        <span className="px-2 py-0.5 bg-[var(--new-btn-primary)]/10 text-[var(--new-btn-primary)] text-xs rounded">
-          {project.niche}
-        </span>
-        {activeCampaigns > 0 && (
-          <span className="px-2 py-0.5 bg-green-500/10 text-green-400 text-xs rounded">
-            {activeCampaigns} active campaign{activeCampaigns > 1 ? 's' : ''}
-          </span>
-        )}
-      </div>
-
-      {project.campaigns.length > 0 && (
-        <div className="border-t border-[var(--new-sep)] pt-3 flex flex-col gap-1">
-          {project.campaigns.slice(0, 3).map((c) => (
-            <div key={c.id} className="flex justify-between items-center">
-              <span className="text-xs text-[var(--new-textItemBlur)] truncate">{c.name}</span>
-              <StatusBadge status={c.status} />
-            </div>
-          ))}
-          {project.campaigns.length > 3 && (
-            <span className="text-xs text-[var(--new-textItemBlur)]">
-              +{project.campaigns.length - 3} more
-            </span>
-          )}
-        </div>
-      )}
-    </div>
-  );
-};
-
-// ─── Main Component ───────────────────────────────────────────────────────────
-
-export const MarketingProjects: FC = () => {
-  const { data: projects, isLoading } = useProjects();
-  const modal = useModals();
-  const [selectedProject, setSelectedProject] = useState<MarketingProject | null>(null);
-
-  const openWizard = useCallback(
-    (existing?: MarketingProject) => {
-      modal.openModal({
-        title: existing ? 'Edit Project' : 'New Marketing Project',
-        component: <ProjectWizard existing={existing} onClose={() => modal.closeModal()} />,
-        size: 'lg',
-      });
-    },
-    [modal]
-  );
-
-  if (selectedProject) {
-    return (
-      <ProjectDetail
-        project={selectedProject}
-        onBack={() => setSelectedProject(null)}
-        onEdit={() => openWizard(selectedProject)}
-      />
-    );
-  }
-
-  return (
-    <div className="flex flex-col gap-6 p-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-[rgb(var(--new-textColor))]">Marketing Projects</h1>
-          <p className="text-sm text-[var(--new-textItemBlur)] mt-1">
-            Each project gives the AI a complete brief about your product so it can plan and create marketing that actually works.
-          </p>
-        </div>
-        <Button onClick={() => openWizard()}>+ New Project</Button>
-      </div>
-
-      {/* Empty State */}
-      {!isLoading && (!projects || projects.length === 0) && (
-        <div className="border border-dashed border-[var(--new-sep)] rounded-xl p-12 text-center">
-          <div className="text-4xl mb-3">🚀</div>
-          <h3 className="font-semibold text-[rgb(var(--new-textColor))] text-lg mb-2">
-            Set up your first project
-          </h3>
-          <p className="text-[var(--new-textItemBlur)] text-sm mb-6 max-w-md mx-auto">
-            Tell Postlaa about your product, audience, and goals. The AI will use this context to plan your entire marketing strategy — from content topics to posting schedules.
-          </p>
-          <Button onClick={() => openWizard()}>Create First Project</Button>
-        </div>
-      )}
-
-      {/* Project Grid */}
-      {projects && projects.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onSelect={() => setSelectedProject(project)}
-              onEdit={() => openWizard(project)}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
-// ─── Project Detail (with Campaigns) ─────────────────────────────────────────
-
-const useCampaigns = (projectId: string) => {
-  const fetch = useFetch();
-  return useSWR<Campaign[]>(`campaigns-${projectId}`, async () => {
-    const res = await fetch(`/marketing/projects/${projectId}/campaigns`);
-    return res.json();
-  });
-};
+// ─── Campaign Wizard ──────────────────────────────────────────────────────────
 
 const CampaignWizard: FC<{
   projectId: string;
@@ -454,10 +314,13 @@ const CampaignWizard: FC<{
       });
       if (!res.ok) throw new Error();
       await mutate(`campaigns-${projectId}`);
-      toaster.show('Campaign created! Open the AI agent to start planning.', 'success');
+      toaster.show(
+        'Campaign created! Open the AI agent to start planning.',
+        'success'
+      );
       onClose();
     } catch {
-      toaster.show('Failed to create campaign', 'error');
+      toaster.show('Failed to create campaign', 'warning');
     } finally {
       setLoading(false);
     }
@@ -466,20 +329,26 @@ const CampaignWizard: FC<{
   return (
     <div className="flex flex-col gap-4">
       <Input
+        name="campaignName"
         label="Campaign Name"
         placeholder="e.g. Q2 Growth Push, App Launch Campaign"
         value={form.name}
         onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
       />
       <Textarea
+        name="campaignGoal"
         label="Campaign Goal"
         placeholder="e.g. Drive 1000 new app downloads in April by building awareness on Instagram and LinkedIn"
         value={form.goal}
-        onChange={(e) => setForm((f) => ({ ...f, goal: e.target.value }))}
-        rows={4}
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+          setForm((f) => ({ ...f, goal: e.target.value }))
+        }
+
       />
       <div className="flex gap-3 pt-2">
-        <Button secondary onClick={onClose} className="flex-1">Cancel</Button>
+        <Button secondary onClick={onClose} className="flex-1">
+          Cancel
+        </Button>
         <Button
           className="flex-1"
           loading={loading}
@@ -493,6 +362,110 @@ const CampaignWizard: FC<{
   );
 };
 
+// ─── Project Card ─────────────────────────────────────────────────────────────
+
+const ProjectCard: FC<{
+  project: MarketingProject;
+  onSelect: () => void;
+  onEdit: () => void;
+}> = ({ project, onSelect, onEdit }) => {
+  const fetch = useFetch();
+  const { mutate } = useSWRConfig();
+  const toaster = useToaster();
+
+  const handleDelete = useCallback(
+    async (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (!confirm(`Delete project "${project.name}"? This cannot be undone.`))
+        return;
+      await fetch(`/marketing/projects/${project.id}`, { method: 'DELETE' });
+      await mutate('marketing-projects');
+      toaster.show('Project deleted', 'success');
+    },
+    [project, fetch, mutate, toaster]
+  );
+
+  const activeCampaigns = project.campaigns.filter(
+    (c) => c.status === 'ACTIVE'
+  ).length;
+
+  return (
+    <div
+      className="bg-[var(--new-bgColorInner)] border border-[var(--new-border)] rounded-xl p-5 flex flex-col gap-3 cursor-pointer hover:border-[var(--new-btn-primary)] transition-colors"
+      onClick={onSelect}
+    >
+      <div className="flex justify-between items-start">
+        <div className="flex flex-col gap-1">
+          <h3 className="font-semibold text-[rgb(var(--new-textColor))]">
+            {project.name}
+          </h3>
+          <a
+            href={project.url}
+            target="_blank"
+            rel="noreferrer"
+            className="text-xs text-[var(--new-textItemBlur)] hover:text-[var(--new-btn-primary)] transition-colors"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {project.url}
+          </a>
+        </div>
+        <div className="flex gap-2">
+          <button
+            className="text-xs px-2 py-1 rounded bg-[var(--new-btn-simple)] text-[var(--new-btn-text)] hover:opacity-80 transition-opacity"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit();
+            }}
+          >
+            Edit
+          </button>
+          <button
+            className="text-xs px-2 py-1 rounded bg-red-500/20 text-red-400 hover:opacity-80 transition-opacity"
+            onClick={handleDelete}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+
+      <p className="text-sm text-[var(--new-textItemBlur)] line-clamp-2">
+        {project.description}
+      </p>
+
+      <div className="flex gap-2 flex-wrap">
+        <span className="px-2 py-0.5 bg-[var(--new-btn-primary)]/10 text-[var(--new-btn-primary)] text-xs rounded">
+          {project.niche}
+        </span>
+        {activeCampaigns > 0 && (
+          <span className="px-2 py-0.5 bg-green-500/10 text-green-400 text-xs rounded">
+            {activeCampaigns} active campaign{activeCampaigns > 1 ? 's' : ''}
+          </span>
+        )}
+      </div>
+
+      {project.campaigns.length > 0 && (
+        <div className="border-t border-[var(--new-sep)] pt-3 flex flex-col gap-1">
+          {project.campaigns.slice(0, 3).map((c) => (
+            <div key={c.id} className="flex justify-between items-center">
+              <span className="text-xs text-[var(--new-textItemBlur)] truncate">
+                {c.name}
+              </span>
+              <StatusBadge status={c.status} />
+            </div>
+          ))}
+          {project.campaigns.length > 3 && (
+            <span className="text-xs text-[var(--new-textItemBlur)]">
+              +{project.campaigns.length - 3} more
+            </span>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ─── Project Detail ───────────────────────────────────────────────────────────
+
 const ProjectDetail: FC<{
   project: MarketingProject;
   onBack: () => void;
@@ -504,14 +477,18 @@ const ProjectDetail: FC<{
   const openCampaignModal = useCallback(() => {
     modal.openModal({
       title: 'New Campaign',
-      component: <CampaignWizard projectId={project.id} onClose={() => modal.closeModal()} />,
+      children: (
+        <CampaignWizard
+          projectId={project.id}
+          onClose={() => modal.closeCurrent()}
+        />
+      ),
       size: 'md',
     });
   }, [modal, project.id]);
 
   return (
     <div className="flex flex-col gap-6 p-6">
-      {/* Header */}
       <div className="flex items-center gap-3">
         <button
           onClick={onBack}
@@ -520,7 +497,9 @@ const ProjectDetail: FC<{
           ← Back
         </button>
         <span className="text-[var(--new-sep)]">/</span>
-        <h1 className="text-xl font-bold text-[rgb(var(--new-textColor))]">{project.name}</h1>
+        <h1 className="text-xl font-bold text-[rgb(var(--new-textColor))]">
+          {project.name}
+        </h1>
         <button
           onClick={onEdit}
           className="ml-auto text-xs px-3 py-1.5 rounded bg-[var(--new-btn-simple)] text-[var(--new-btn-text)]"
@@ -529,35 +508,50 @@ const ProjectDetail: FC<{
         </button>
       </div>
 
-      {/* Project Brief Summary */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-[var(--new-bgColorInner)] border border-[var(--new-border)] rounded-xl p-4 flex flex-col gap-2">
-          <span className="text-xs text-[var(--new-textItemBlur)] uppercase tracking-wider">Niche</span>
-          <span className="text-sm text-[rgb(var(--new-textColor))]">{project.niche}</span>
+          <span className="text-xs text-[var(--new-textItemBlur)] uppercase tracking-wider">
+            Niche
+          </span>
+          <span className="text-sm text-[rgb(var(--new-textColor))]">
+            {project.niche}
+          </span>
         </div>
         {project.targetAudience && (
           <div className="bg-[var(--new-bgColorInner)] border border-[var(--new-border)] rounded-xl p-4 flex flex-col gap-2">
-            <span className="text-xs text-[var(--new-textItemBlur)] uppercase tracking-wider">Target Audience</span>
-            <span className="text-sm text-[rgb(var(--new-textColor))] line-clamp-3">{project.targetAudience}</span>
+            <span className="text-xs text-[var(--new-textItemBlur)] uppercase tracking-wider">
+              Target Audience
+            </span>
+            <span className="text-sm text-[rgb(var(--new-textColor))] line-clamp-3">
+              {project.targetAudience}
+            </span>
           </div>
         )}
         {project.goals && (
           <div className="bg-[var(--new-bgColorInner)] border border-[var(--new-border)] rounded-xl p-4 flex flex-col gap-2 md:col-span-2">
-            <span className="text-xs text-[var(--new-textItemBlur)] uppercase tracking-wider">Goals</span>
-            <span className="text-sm text-[rgb(var(--new-textColor))]">{project.goals}</span>
+            <span className="text-xs text-[var(--new-textItemBlur)] uppercase tracking-wider">
+              Goals
+            </span>
+            <span className="text-sm text-[rgb(var(--new-textColor))]">
+              {project.goals}
+            </span>
           </div>
         )}
       </div>
 
-      {/* Campaigns */}
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold text-[rgb(var(--new-textColor))]">Campaigns</h2>
+        <h2 className="text-lg font-semibold text-[rgb(var(--new-textColor))]">
+          Campaigns
+        </h2>
         <Button onClick={openCampaignModal}>+ New Campaign</Button>
       </div>
 
-      {(!campaigns || campaigns.length === 0) ? (
+      {!campaigns || campaigns.length === 0 ? (
         <div className="border border-dashed border-[var(--new-sep)] rounded-xl p-8 text-center">
-          <p className="text-[var(--new-textItemBlur)] mb-4">No campaigns yet. Create one then open the AI agent to build your content plan.</p>
+          <p className="text-[var(--new-textItemBlur)] mb-4">
+            No campaigns yet. Create one then open the AI agent to build your
+            content plan.
+          </p>
           <Button onClick={openCampaignModal}>Create First Campaign</Button>
         </div>
       ) : (
@@ -568,8 +562,12 @@ const ProjectDetail: FC<{
               className="bg-[var(--new-bgColorInner)] border border-[var(--new-border)] rounded-xl p-4 flex justify-between items-start"
             >
               <div className="flex flex-col gap-1">
-                <span className="font-medium text-[rgb(var(--new-textColor))]">{campaign.name}</span>
-                <span className="text-sm text-[var(--new-textItemBlur)] line-clamp-2">{campaign.goal}</span>
+                <span className="font-medium text-[rgb(var(--new-textColor))]">
+                  {campaign.name}
+                </span>
+                <span className="text-sm text-[var(--new-textItemBlur)] line-clamp-2">
+                  {campaign.goal}
+                </span>
               </div>
               <StatusBadge status={campaign.status} />
             </div>
@@ -577,13 +575,97 @@ const ProjectDetail: FC<{
         </div>
       )}
 
-      {/* AI Prompt Hint */}
       <div className="bg-[var(--new-btn-primary)]/5 border border-[var(--new-btn-primary)]/20 rounded-xl p-4">
         <p className="text-sm text-[var(--new-textItemBlur)]">
-          <span className="text-[var(--new-btn-primary)] font-medium">Tip:</span> Open the AI agent and say{' '}
-          <span className="italic">"Plan marketing for [Campaign Name]"</span> — the agent will research your niche, build a content strategy, and schedule posts automatically.
+          <span className="text-[var(--new-btn-primary)] font-medium">
+            Tip:
+          </span>{' '}
+          Open the AI agent and say{' '}
+          <span className="italic">"Plan marketing for [Campaign Name]"</span> —
+          the agent will research your niche, build a content strategy, and
+          schedule posts automatically.
         </p>
       </div>
+    </div>
+  );
+};
+
+// ─── Main Page Component ──────────────────────────────────────────────────────
+
+export const MarketingProjects: FC = () => {
+  const { data: projects, isLoading } = useProjects();
+  const modal = useModals();
+  const [selectedProject, setSelectedProject] =
+    useState<MarketingProject | null>(null);
+
+  const openWizard = useCallback(
+    (existing?: MarketingProject) => {
+      modal.openModal({
+        title: existing ? 'Edit Project' : 'New Marketing Project',
+        children: (
+          <ProjectWizard
+            existing={existing}
+            onClose={() => modal.closeCurrent()}
+          />
+        ),
+        size: 'lg',
+      });
+    },
+    [modal]
+  );
+
+  if (selectedProject) {
+    return (
+      <ProjectDetail
+        project={selectedProject}
+        onBack={() => setSelectedProject(null)}
+        onEdit={() => openWizard(selectedProject)}
+      />
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-6 p-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-[rgb(var(--new-textColor))]">
+            Marketing Projects
+          </h1>
+          <p className="text-sm text-[var(--new-textItemBlur)] mt-1">
+            Each project gives the AI a complete brief so it can plan and create
+            marketing that actually works.
+          </p>
+        </div>
+        <Button onClick={() => openWizard()}>+ New Project</Button>
+      </div>
+
+      {!isLoading && (!projects || projects.length === 0) && (
+        <div className="border border-dashed border-[var(--new-sep)] rounded-xl p-12 text-center">
+          <div className="text-4xl mb-3">🚀</div>
+          <h3 className="font-semibold text-[rgb(var(--new-textColor))] text-lg mb-2">
+            Set up your first project
+          </h3>
+          <p className="text-[var(--new-textItemBlur)] text-sm mb-6 max-w-md mx-auto">
+            Tell Postlaa about your product, audience, and goals. The AI will
+            use this context to plan your entire marketing strategy — from
+            content topics to posting schedules.
+          </p>
+          <Button onClick={() => openWizard()}>Create First Project</Button>
+        </div>
+      )}
+
+      {projects && projects.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {projects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onSelect={() => setSelectedProject(project)}
+              onEdit={() => openWizard(project)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
