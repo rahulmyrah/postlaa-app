@@ -43,9 +43,9 @@
 - `libraries/nestjs-libraries/src/database/prisma/schema.prisma` — Database schema
 
 ## Documentation
-- Main docs: https://docs.postiz.com/
-- Developer guide: https://docs.postiz.com/developer-guide
-- Public API: https://docs.postiz.com/public-api
+- Main docs: https://docs.postlaa.com/
+- Developer guide: https://docs.postlaa.com/developer-guide
+- Public API: https://docs.postlaa.com/public-api
 
 ---
 

@@ -1,6 +1,6 @@
 # Postlaa - Production Docker Compose
 # For: Internal team use (~5 members)
-# Domain: posts.aitoolsfactory.com
+# Domain: postlaa.com
 #
 # BEFORE DEPLOYING - change these 3 values:
 #   1. TRAEFIK_CERTRESOLVER  → your Traefik certresolver name (check your traefik config, commonly "letsencrypt" or "le")
@@ -10,7 +10,7 @@
 # HOW TO DEPLOY on Hostinger:
 #   1. Open Docker Manager → Compose → paste this file
 #   2. Click Deploy
-#   3. After first boot, register at https://posts.aitoolsfactory.com/auth
+#   3. After first boot, register at https://postlaa.com/auth
 #   4. Then run the SQL below to make your account SuperAdmin:
 #
 #   docker exec -i postlaa-postgres psql -U postiz -d postiz_db << 'EOF'
@@ -23,7 +23,7 @@ services:
   # Main App (Frontend + Backend + Nginx in one)
   # ─────────────────────────────────────────────
   postlaa:
-    image: ghcr.io/gitroomhq/postiz-app:latest
+    image: ghcr.io/rahulmyrah/postlaa-app:latest
     container_name: postlaa
     restart: unless-stopped
     # This command writes all Docker env vars to /app/.env before starting
@@ -31,9 +31,9 @@ services:
     command: sh -c "printenv > /app/.env && nginx && pnpm run pm2"
     environment:
       # === URLs (update domain if you change it)
-      MAIN_URL: 'https://posts.aitoolsfactory.com'
-      FRONTEND_URL: 'https://posts.aitoolsfactory.com'
-      NEXT_PUBLIC_BACKEND_URL: 'https://posts.aitoolsfactory.com/api'
+      MAIN_URL: 'https://postlaa.com'
+      FRONTEND_URL: 'https://postlaa.com'
+      NEXT_PUBLIC_BACKEND_URL: 'https://postlaa.com/api'
       BACKEND_INTERNAL_URL: 'http://localhost:3000'
 
       # === Database & Cache
@@ -53,7 +53,7 @@ services:
 
       # === App Settings
       IS_GENERAL: 'true'
-      DISABLE_REGISTRATION: 'false'
+      DISABLE_REGISTRATION: 'true'
       NX_ADD_PLUGINS: 'false'
 
       # === Optional: Add social API keys here when ready
@@ -79,13 +79,13 @@ services:
         condition: service_healthy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.postlaa.rule=Host(`posts.aitoolsfactory.com`)"
+      - "traefik.http.routers.postlaa.rule=Host(`postlaa.com`) || Host(`www.postlaa.com`)"
       - "traefik.http.routers.postlaa.entrypoints=websecure"
       - "traefik.http.routers.postlaa.tls=true"
       - "traefik.http.routers.postlaa.tls.certresolver=letsencrypt"
       - "traefik.http.services.postlaa.loadbalancer.server.port=5000"
       # HTTP → HTTPS redirect
-      - "traefik.http.routers.postlaa-http.rule=Host(`posts.aitoolsfactory.com`)"
+      - "traefik.http.routers.postlaa-http.rule=Host(`postlaa.com`) || Host(`www.postlaa.com`)"
       - "traefik.http.routers.postlaa-http.entrypoints=web"
       - "traefik.http.routers.postlaa-http.middlewares=redirect-to-https"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"

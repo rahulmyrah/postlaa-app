@@ -37,11 +37,11 @@ sftp.close()
 print("  ✓ Uploaded successfully")
 
 # Step 3: Verify DNS resolves (warn if not)
-print("\n[3/5] Checking DNS for posts.aitoolsfactory.com...")
-out, _ = run(client, 'getent hosts posts.aitoolsfactory.com 2>/dev/null || echo "DNS_NOT_RESOLVED"')
+print("\n[3/5] Checking DNS for postlaa.com...")
+out, _ = run(client, 'getent hosts postlaa.com 2>/dev/null || echo "DNS_NOT_RESOLVED"')
 if 'DNS_NOT_RESOLVED' in out or not out.strip():
-    print("  ⚠ WARNING: posts.aitoolsfactory.com does not resolve yet.")
-    print("  ⚠ Add an A record: posts.aitoolsfactory.com → 89.116.228.186")
+    print("  ⚠  WARNING: postlaa.com does not resolve yet.")
+    print("  ⚠  Add an A record: postlaa.com → 89.116.228.186")
     print("  ⚠ Continuing anyway - Traefik SSL cert will be issued once DNS is set.")
 else:
     print(f"  ✓ DNS resolves: {out.strip()}")
@@ -56,7 +56,7 @@ time.sleep(8)
 out, _ = run(client, 'docker ps --format "{{.Names}}\\t{{.Status}}" | grep -E "postlaa|temporal"')
 
 print("\n✓ Deployment complete!")
-print("\nNext step: Register at https://posts.aitoolsfactory.com/auth")
+print("\nNext step: Register at https://postlaa.com/auth")
 print("Then run scripts/make_admin.py to create SuperAdmin")
 
 client.close()

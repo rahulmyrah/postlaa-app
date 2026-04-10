@@ -43,6 +43,8 @@ model Organization {
   webhooks            Webhooks[]
   oauthApp            OAuthApp[]
   oauthAuthorizations OAuthAuthorization[]
+  userAgents          UserAgent[]
+  mcpClients          MCPClient[]
 
   @@index([apiKey])
   @@index([streakSince])
@@ -956,4 +958,44 @@ model Announcement {
   description String
   color       AnnouncementColor @default(INFO)
   createdAt   DateTime          @default(now())
+}
+
+// ─── Multi-Agent System ───────────────────────────────────────────────────────
+
+model UserAgent {
+  id             String       @id @default(uuid())
+  organizationId String
+  name           String
+  role           String
+  description    String
+  instructions   String       @db.Text
+  model          String       @default("gpt-4.1")
+  avatar         String?
+  enabled        Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+
+// ─── MCP Client (connect TO external MCP servers) ─────────────────────────────
+
+model MCPClient {
+  id             String       @id @default(uuid())
+  organizationId String
+  name           String
+  url            String
+  authType       String       @default("none")
+  authValue      String?
+  enabled        Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId])
+  @@index([deletedAt])
 }
