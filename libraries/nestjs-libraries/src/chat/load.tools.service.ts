@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Agent } from '@mastra/core/agent';
 import { openai } from '@ai-sdk/openai';
 import { Memory } from '@mastra/memory';
@@ -7,6 +7,7 @@ import { array, object, string } from 'zod';
 import { ModuleRef } from '@nestjs/core';
 import { toolList } from '@gitroom/nestjs-libraries/chat/tools/tool.list';
 import dayjs from 'dayjs';
+import { MCPClient } from '@mastra/mcp';
 
 export const AgentState = object({
   proverbs: array(string()).default([]),
@@ -41,7 +42,7 @@ export class LoadToolsService {
   }
 
   async agent() {
-    const tools = await this.loadTools();
+    const baseTools = await this.loadTools();
     return new Agent({
       id: 'Postlaa',
       name: 'Postlaa',
@@ -87,7 +88,31 @@ export class LoadToolsService {
 `;
       },
       model: openai('gpt-5.2'),
-      tools,
+      tools: async ({ requestContext }) => {
+        const mcpServersJson: string = requestContext.get('mcpServers' as never);
+        if (!mcpServersJson) {
+          return baseTools;
+        }
+        try {
+          const servers = JSON.parse(mcpServersJson);
+          const mcpClient = new MCPClient({ id: `req-${Date.now()}`, servers });
+          const toolsets = await mcpClient.listToolsets();
+          await mcpClient.disconnect();
+          const mcpTools = Object.values(toolsets).reduce(
+            (all, toolset) => ({ ...all, ...toolset }),
+            {} as Record<string, any>
+          );
+          const merged = { ...baseTools, ...mcpTools };
+          Logger.log(
+            `LoadToolsService: merged ${Object.keys(mcpTools).length} external MCP tool(s) for request`,
+            'LoadToolsService'
+          );
+          return merged;
+        } catch (err) {
+          Logger.warn(`LoadToolsService: failed to load MCP tools — ${err.message}`, 'LoadToolsService');
+          return baseTools;
+        }
+      },
       memory: new Memory({
         storage: pStore,
         options: {

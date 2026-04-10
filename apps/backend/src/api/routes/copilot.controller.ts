@@ -19,6 +19,7 @@ import { Organization } from '@prisma/client';
 import { SubscriptionService } from '@gitroom/nestjs-libraries/database/prisma/subscriptions/subscription.service';
 import { MastraAgent } from '@ag-ui/mastra';
 import { MastraService } from '@gitroom/nestjs-libraries/chat/mastra.service';
+import { MCPClientService } from '@gitroom/nestjs-libraries/database/prisma/mcpclients/mcpclient.service';
 import { Request, Response } from 'express';
 import { RequestContext } from '@mastra/core/di';
 import { CheckPolicies } from '@gitroom/backend/services/auth/permissions/permissions.ability';
@@ -34,7 +35,8 @@ export type ChannelsContext = {
 export class CopilotController {
   constructor(
     private _subscriptionService: SubscriptionService,
-    private _mastraService: MastraService
+    private _mastraService: MastraService,
+    private _mcpClientService: MCPClientService
   ) {}
   @Post('/chat')
   chatAgent(@Req() req: Request, @Res() res: Response) {
@@ -80,6 +82,34 @@ export class CopilotController {
 
     requestContext.set('organization', JSON.stringify(organization));
     requestContext.set('ui', 'true');
+
+    // Load tools from all enabled external MCP servers for this org
+    const enabledClients = await this._mcpClientService.getEnabled(organization.id);
+    if (enabledClients.length > 0) {
+      const servers = Object.fromEntries(
+        enabledClients.map((c) => {
+          const serverConfig: any = { url: c.url };
+          if (c.authType === 'bearer' && c.authValue) {
+            serverConfig.requestInit = {
+              headers: { Authorization: `Bearer ${c.authValue}` },
+            };
+          } else if (c.authType === 'header' && c.authValue) {
+            // authValue expected as "HeaderName: value"
+            const sep = c.authValue.indexOf(':');
+            if (sep > -1) {
+              const headerName = c.authValue.slice(0, sep).trim();
+              const headerValue = c.authValue.slice(sep + 1).trim();
+              serverConfig.requestInit = {
+                headers: { [headerName]: headerValue },
+              };
+            }
+          }
+          return [c.name, serverConfig];
+        })
+      );
+      requestContext.set('mcpServers', JSON.stringify(servers));
+      Logger.log(`Queued ${enabledClients.length} external MCP server(s) for org ${organization.id}`);
+    }
 
     const agents = MastraAgent.getLocalAgents({
       resourceId: organization.id,
