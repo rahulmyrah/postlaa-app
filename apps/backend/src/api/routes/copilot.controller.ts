@@ -29,6 +29,7 @@ export type ChannelsContext = {
   integrations: string;
   organization: string;
   ui: string;
+  mcpServers: string;
 };
 
 @Controller('/copilot')

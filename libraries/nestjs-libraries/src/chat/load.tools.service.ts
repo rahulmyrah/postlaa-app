@@ -123,7 +123,7 @@ export class LoadToolsService {
           );
           return merged;
         } catch (err) {
-          Logger.warn(`LoadToolsService: failed to load MCP tools — ${err.message}`, 'LoadToolsService');
+          Logger.warn(`LoadToolsService: failed to load MCP tools — ${err instanceof Error ? err.message : String(err)}`, 'LoadToolsService');
           return baseTools;
         }
       },

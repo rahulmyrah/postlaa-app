@@ -4,7 +4,10 @@ import { CampaignDto } from '@gitroom/nestjs-libraries/dtos/marketing/campaign.d
 
 @Injectable()
 export class CampaignRepository {
-  constructor(private _campaign: PrismaRepository<'campaign'>) {}
+  constructor(
+    private _campaign: PrismaRepository<'campaign'>,
+    private _researchRun: PrismaRepository<'researchRun'>
+  ) {}
 
   getAllForProject(projectId: string) {
     return this._campaign.model.campaign.findMany({
@@ -69,7 +72,7 @@ export class CampaignRepository {
   }
 
   addResearchRun(campaignId: string, agentType: string, findings: object) {
-    return this._campaign.model.researchRun.create({
+    return this._researchRun.model.researchRun.create({
       data: { campaignId, agentType, findings },
     });
   }
