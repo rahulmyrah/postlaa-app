@@ -33,14 +33,14 @@ export const startMcp = async (app: INestApplication) => {
   };
 
   const mastra = await mastraService.mastra();
-  const agent = mastra.getAgent('postiz');
+  const agent = mastra.getAgent('Postlaa');
   const tools = await agent.listTools();
 
   const serverConfig = {
     name: 'Postlaa MCP',
     version: '1.0.0',
     tools,
-    agents: { postiz: agent },
+    agents: { Postlaa: agent },
   };
 
   const server = new MCPServer(serverConfig);
