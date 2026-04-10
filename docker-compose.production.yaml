@@ -56,6 +56,9 @@ services:
       DISABLE_REGISTRATION: 'true'
       NX_ADD_PLUGINS: 'false'
 
+      # === AI Agent (required for /agents chat to work)
+      OPENAI_API_KEY: ''          # ← REQUIRED: get from platform.openai.com
+
       # === Optional: Add social API keys here when ready
       # X_API_KEY: ''
       # X_API_SECRET: ''
@@ -65,7 +68,6 @@ services:
       # FACEBOOK_APP_SECRET: ''
       # YOUTUBE_CLIENT_ID: ''
       # YOUTUBE_CLIENT_SECRET: ''
-      # OPENAI_API_KEY: ''
 
     volumes:
       - postlaa-uploads:/uploads/
