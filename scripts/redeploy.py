@@ -17,13 +17,25 @@ if not GHCR_TOKEN:
 
 def run(client, cmd, timeout=60):
     print(f"  >> {cmd[:80]}")
-    stdin, stdout, stderr = client.exec_command(cmd, timeout=timeout)
-    out = stdout.read().decode('utf-8', errors='replace')
-    err = stderr.read().decode('utf-8', errors='replace')
-    combined = (out + err).strip()
-    if combined:
-        print(combined)
-    return out, err
+    stdin, stdout, stderr = client.exec_command(cmd, get_pty=True)
+    stdout.channel.settimeout(timeout)
+    out_lines = []
+    try:
+        while not stdout.channel.exit_status_ready():
+            if stdout.channel.recv_ready():
+                chunk = stdout.channel.recv(4096).decode('utf-8', errors='replace')
+                if chunk:
+                    out_lines.append(chunk)
+                    print(chunk, end='', flush=True)
+        # drain remaining
+        while stdout.channel.recv_ready():
+            chunk = stdout.channel.recv(4096).decode('utf-8', errors='replace')
+            out_lines.append(chunk)
+            print(chunk, end='', flush=True)
+    except Exception:
+        pass
+    out = ''.join(out_lines)
+    return out, ''
 
 client = paramiko.SSHClient()
 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())

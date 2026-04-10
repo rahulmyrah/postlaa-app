@@ -40,6 +40,7 @@ import { AnnouncementsController } from '@gitroom/backend/api/routes/announcemen
 import { AuthProviderManager } from '@gitroom/backend/services/auth/providers/providers.manager';
 import { UserAgentController } from '@gitroom/backend/api/routes/useragent.controller';
 import { MCPClientController } from '@gitroom/backend/api/routes/mcpclient.controller';
+import { MarketingController } from '@gitroom/backend/api/routes/marketing.controller';
 import { GithubProvider } from '@gitroom/backend/services/auth/providers/github.provider';
 import { GoogleProvider } from '@gitroom/backend/services/auth/providers/google.provider';
 import { FarcasterProvider } from '@gitroom/backend/services/auth/providers/farcaster.provider';
@@ -67,6 +68,7 @@ const authenticatedController = [
   AnnouncementsController,
   UserAgentController,
   MCPClientController,
+  MarketingController,
 ];
 @Module({
   imports: [UploadModule],

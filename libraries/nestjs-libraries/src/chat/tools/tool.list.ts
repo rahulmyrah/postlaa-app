@@ -6,6 +6,8 @@ import { VideoFunctionTool } from '@gitroom/nestjs-libraries/chat/tools/video.fu
 import { GenerateVideoTool } from '@gitroom/nestjs-libraries/chat/tools/generate.video.tool';
 import { GenerateImageTool } from '@gitroom/nestjs-libraries/chat/tools/generate.image.tool';
 import { IntegrationListTool } from '@gitroom/nestjs-libraries/chat/tools/integration.list.tool';
+import { ProjectContextTool } from '@gitroom/nestjs-libraries/chat/tools/project.context.tool';
+import { CampaignPlanTool } from '@gitroom/nestjs-libraries/chat/tools/campaign.plan.tool';
 
 export const toolList = [
   IntegrationListTool,
@@ -16,4 +18,6 @@ export const toolList = [
   VideoFunctionTool,
   GenerateVideoTool,
   GenerateImageTool,
+  ProjectContextTool,
+  CampaignPlanTool,
 ];

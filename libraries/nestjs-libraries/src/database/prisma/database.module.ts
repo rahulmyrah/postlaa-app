@@ -44,6 +44,10 @@ import { UserAgentRepository } from '@gitroom/nestjs-libraries/database/prisma/u
 import { UserAgentService } from '@gitroom/nestjs-libraries/database/prisma/useragents/useragent.service';
 import { MCPClientRepository } from '@gitroom/nestjs-libraries/database/prisma/mcpclients/mcpclient.repository';
 import { MCPClientService } from '@gitroom/nestjs-libraries/database/prisma/mcpclients/mcpclient.service';
+import { MarketingProjectRepository } from '@gitroom/nestjs-libraries/database/prisma/marketing/marketing-project.repository';
+import { MarketingProjectService } from '@gitroom/nestjs-libraries/database/prisma/marketing/marketing-project.service';
+import { CampaignRepository } from '@gitroom/nestjs-libraries/database/prisma/marketing/campaign.repository';
+import { CampaignService } from '@gitroom/nestjs-libraries/database/prisma/marketing/campaign.service';
 
 @Global()
 @Module({
@@ -97,6 +101,10 @@ import { MCPClientService } from '@gitroom/nestjs-libraries/database/prisma/mcpc
     UserAgentService,
     MCPClientRepository,
     MCPClientService,
+    MarketingProjectRepository,
+    MarketingProjectService,
+    CampaignRepository,
+    CampaignService,
   ],
   get exports() {
     return this.providers;

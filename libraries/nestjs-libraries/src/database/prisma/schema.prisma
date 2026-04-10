@@ -45,6 +45,7 @@ model Organization {
   oauthAuthorizations OAuthAuthorization[]
   userAgents          UserAgent[]
   mcpClients          MCPClient[]
+  marketingProjects   MarketingProject[]
 
   @@index([apiKey])
   @@index([streakSince])
@@ -998,4 +999,70 @@ model MCPClient {
 
   @@index([organizationId])
   @@index([deletedAt])
+}
+
+// ─── Marketing Intelligence ───────────────────────────────────────────────────
+
+model MarketingProject {
+  id             String       @id @default(uuid())
+  organizationId String
+  name           String
+  description    String       @db.Text
+  url            String
+  niche          String
+  targetAudience String?      @db.Text
+  brandVoice     String?      @db.Text
+  brandColors    String?
+  competitors    String?      @db.Text
+  goals          String?      @db.Text
+  active         Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  campaigns      Campaign[]
+
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+
+model Campaign {
+  id               String           @id @default(uuid())
+  projectId        String
+  name             String
+  goal             String           @db.Text
+  status           CampaignStatus   @default(RESEARCHING)
+  brief            Json?
+  contentPlan      Json?
+  startDate        DateTime?
+  endDate          DateTime?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  deletedAt        DateTime?
+  project          MarketingProject @relation(fields: [projectId], references: [id])
+  researchRuns     ResearchRun[]
+
+  @@index([projectId])
+  @@index([status])
+  @@index([deletedAt])
+}
+
+model ResearchRun {
+  id          String     @id @default(uuid())
+  campaignId  String
+  agentType   String
+  findings    Json
+  createdAt   DateTime   @default(now())
+  campaign    Campaign   @relation(fields: [campaignId], references: [id])
+
+  @@index([campaignId])
+  @@index([agentType])
+}
+
+enum CampaignStatus {
+  RESEARCHING
+  PLANNING
+  ACTIVE
+  PAUSED
+  COMPLETED
 }
