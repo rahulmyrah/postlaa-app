@@ -43,7 +43,7 @@
   "reveal": "إظهار",
   "copy_key": "نسخ المفتاح",
   "mcp": "MCP",
-  "connect Postlaa MCP بعميلك (بث HTTP) لجدولة منشوراتك بشكل أسرع!",
+  "connect_your_mcp_client_to_postiz_to_schedule_your_posts_faster": "قم بتوصيل خادم Postlaa MCP بعميلك (بث HTTP) لجدولة منشوراتك بشكل أسرع.",
   "share_with_a_client": "مشاركة مع عميل",
   "post": "منشور",
   "comments": "تعليقات",

@@ -43,7 +43,7 @@
   "reveal": "הצג",
   "copy_key": "העתק מפתח",
   "mcp": "MCP",
-  "connect Postlaa MCP של Postlaa ללקוח שלך (הזרמת Http) כדי לתזמן את הפוסטים שלך מהר יותר!",
+  "connect_your_mcp_client_to_postiz_to_schedule_your_posts_faster": "חבר את שרת Postlaa MCP ללקוח שלך (הזרמת Http) כדי לתזמן את הפוסטים שלך מהר יותר.",
   "share_with_a_client": "שתף עם לקוח",
   "post": "פוסט",
   "comments": "תגובות",

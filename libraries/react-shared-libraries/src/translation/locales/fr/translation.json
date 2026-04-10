@@ -43,7 +43,7 @@
   "reveal": "Révéler",
   "copy_key": "Copier la clé",
   "mcp": "MCP",
-  "connect Postlaa MCP de Postlaa à votre client (streaming HTTP) pour programmer vos publications plus rapidement !",
+  "connect_your_mcp_client_to_postiz_to_schedule_your_posts_faster": "Connectez le serveur Postlaa MCP à votre client (streaming HTTP) pour programmer vos publications plus rapidement.",
   "share_with_a_client": "Partager avec un client",
   "post": "Publication",
   "comments": "Commentaires",

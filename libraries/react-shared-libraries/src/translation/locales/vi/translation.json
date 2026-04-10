@@ -43,7 +43,7 @@
   "reveal": "Hiển thị",
   "copy_key": "Sao chép khóa",
   "mcp": "MCP",
-  "connect Postlaa MCP của Postlaa với máy khách của bạn (Http streaming) để lên lịch bài đăng nhanh hơn!",
+  "connect_your_mcp_client_to_postiz_to_schedule_your_posts_faster": "Kết nối máy chủ Postlaa MCP với máy khách của bạn (Http streaming) để lên lịch bài đăng nhanh hơn.",
   "share_with_a_client": "Chia sẻ với khách hàng",
   "post": "Bài đăng",
   "comments": "Bình luận",

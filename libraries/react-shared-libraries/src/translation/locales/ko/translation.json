@@ -43,7 +43,7 @@
   "reveal": "표시",
   "copy_key": "키 복사",
   "mcp": "MCP",
-  "connect Postlaa MCP 서버를 클라이언트에 연결하세요(Http 스트리밍).",
+  "connect_your_mcp_client_to_postiz_to_schedule_your_posts_faster": "Postlaa MCP 서버를 클라이언트에 연결하여 게시물을 더 빠르게 예약하세요.",
   "share_with_a_client": "클라이언트와 공유",
   "post": "게시물",
   "comments": "댓글",

@@ -43,7 +43,7 @@
   "reveal": "Göster",
   "copy_key": "Anahtarı Kopyala",
   "mcp": "MCP",
-  "connect Postlaa MCP sunucusunu istemcinize (Http akışı) bağlayın!",
+  "connect_your_mcp_client_to_postiz_to_schedule_your_posts_faster": "Postlaa MCP sunucusunu istemcinize (Http akışı) bağlayarak gönderilerinizi daha hızlı planlayın.",
   "share_with_a_client": "Bir müşteriyle paylaş",
   "post": "Gönderi",
   "comments": "Yorumlar",

@@ -43,7 +43,7 @@
   "reveal": "表示",
   "copy_key": "キーをコピー",
   "mcp": "MCP",
-  "connect Postlaa MCPサーバーをクライアント（HTTPストリーミング）に接続しましょう！",
+  "connect_your_mcp_client_to_postiz_to_schedule_your_posts_faster": "Postlaa MCPサーバーをクライアント（HTTPストリーミング）に接続して、投稿をより速くスケジュールしましょう。",
   "share_with_a_client": "クライアントと共有",
   "post": "投稿",
   "comments": "コメント",

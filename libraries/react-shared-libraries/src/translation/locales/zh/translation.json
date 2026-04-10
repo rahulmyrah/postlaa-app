@@ -43,7 +43,7 @@
   "reveal": "显示",
   "copy_key": "复制密钥",
   "mcp": "MCP",
-  "connect Postlaa MCP 服务器连接到您的客户端（Http 流式传输），以更快地安排您的帖子！",
+  "connect_your_mcp_client_to_postiz_to_schedule_your_posts_faster": "将 Postlaa MCP 服务器连接到您的客户端（Http 流式传输），以更快地安排您的帖子。",
   "share_with_a_client": "与客户分享",
   "post": "帖子",
   "comments": "评论",
