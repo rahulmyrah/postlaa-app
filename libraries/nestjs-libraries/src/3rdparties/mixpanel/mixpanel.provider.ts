@@ -3,6 +3,15 @@ import {
   ThirdPartyAbstract,
 } from '@gitroom/nestjs-libraries/3rdparties/thirdparty.interface';
 
+function parseMixpanelKey(apiKey: string): {
+  token: string;
+  user: string;
+  secret: string;
+} {
+  const [token = '', user = '', secret = ''] = apiKey.split(':::');
+  return { token, user, secret };
+}
+
 @ThirdParty({
   identifier: 'mixpanel',
   title: 'Mixpanel',
@@ -12,19 +21,10 @@ import {
   fields: [],
 })
 export class MixpanelProvider extends ThirdPartyAbstract {
-  private _parse(apiKey: string): {
-    token: string;
-    user: string;
-    secret: string;
-  } {
-    const [token = '', user = '', secret = ''] = apiKey.split(':::');
-    return { token, user, secret };
-  }
-
   async checkConnection(
     apiKey: string
   ): Promise<false | { name: string; username: string; id: string }> {
-    const { token, user, secret } = this._parse(apiKey);
+    const { token, user, secret } = parseMixpanelKey(apiKey);
     if (!token) return false;
 
     // Validate via service account if provided
@@ -51,7 +51,7 @@ export class MixpanelProvider extends ThirdPartyAbstract {
   }
 
   async sendData(apiKey: string, data: any): Promise<string> {
-    const { token } = this._parse(apiKey);
+    const { token } = parseMixpanelKey(apiKey);
     if (!token) return '';
 
     const event = [

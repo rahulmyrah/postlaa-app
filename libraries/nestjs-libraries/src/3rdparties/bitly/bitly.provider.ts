@@ -5,6 +5,13 @@ import {
 
 const BITLY_BASE = 'https://api-ssl.bitly.com/v4';
 
+function bitlyHeaders(apiKey: string): Record<string, string> {
+  return {
+    Authorization: `Bearer ${apiKey}`,
+    'Content-Type': 'application/json',
+  };
+}
+
 @ThirdParty({
   identifier: 'bitly',
   title: 'Bitly',
@@ -14,18 +21,11 @@ const BITLY_BASE = 'https://api-ssl.bitly.com/v4';
   fields: [],
 })
 export class BitlyProvider extends ThirdPartyAbstract {
-  private _headers(apiKey: string): Record<string, string> {
-    return {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    };
-  }
-
   async checkConnection(
     apiKey: string
   ): Promise<false | { name: string; username: string; id: string }> {
     const res = await fetch(`${BITLY_BASE}/user`, {
-      headers: this._headers(apiKey),
+      headers: bitlyHeaders(apiKey),
     });
     if (!res.ok) return false;
     const json = await res.json().catch(() => null);
@@ -43,7 +43,7 @@ export class BitlyProvider extends ThirdPartyAbstract {
 
     const res = await fetch(`${BITLY_BASE}/shorten`, {
       method: 'POST',
-      headers: this._headers(apiKey),
+      headers: bitlyHeaders(apiKey),
       body: JSON.stringify({ long_url: longUrl }),
     });
     if (!res.ok) return longUrl;

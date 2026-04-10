@@ -5,6 +5,13 @@ import {
 
 const REBRANDLY_BASE = 'https://api.rebrandly.com/v1';
 
+function rebrandlyHeaders(apiKey: string): Record<string, string> {
+  return {
+    apikey: apiKey,
+    'Content-Type': 'application/json',
+  };
+}
+
 @ThirdParty({
   identifier: 'rebrandly',
   title: 'Rebrandly',
@@ -14,18 +21,11 @@ const REBRANDLY_BASE = 'https://api.rebrandly.com/v1';
   fields: [],
 })
 export class RebrandlyProvider extends ThirdPartyAbstract {
-  private _headers(apiKey: string): Record<string, string> {
-    return {
-      apikey: apiKey,
-      'Content-Type': 'application/json',
-    };
-  }
-
   async checkConnection(
     apiKey: string
   ): Promise<false | { name: string; username: string; id: string }> {
     const res = await fetch(`${REBRANDLY_BASE}/account`, {
-      headers: this._headers(apiKey),
+      headers: rebrandlyHeaders(apiKey),
     });
     if (!res.ok) return false;
     const json = await res.json().catch(() => null);
@@ -43,7 +43,7 @@ export class RebrandlyProvider extends ThirdPartyAbstract {
 
     const res = await fetch(`${REBRANDLY_BASE}/links`, {
       method: 'POST',
-      headers: this._headers(apiKey),
+      headers: rebrandlyHeaders(apiKey),
       body: JSON.stringify({ destination }),
     });
     if (!res.ok) return destination;

@@ -11,44 +11,63 @@ interface KlingTaskResult {
   task_result?: { videos?: Array<{ url: string }> };
 }
 
+function klingBuildJwt(accessKey: string, secretKey: string): string {
+  const now = Math.floor(Date.now() / 1000);
+  const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
+  const payload = Buffer.from(
+    JSON.stringify({ iss: accessKey, exp: now + 1800, nbf: now - 5 })
+  ).toString('base64url');
+  const { createHmac } = require('crypto');
+  const sig = createHmac('sha256', secretKey)
+    .update(`${header}.${payload}`)
+    .digest('base64url');
+  return `${header}.${payload}.${sig}`;
+}
+
+function klingParseKey(apiKey: string): { accessKey: string; secretKey: string } {
+  const [accessKey, secretKey] = apiKey.split(':');
+  if (!accessKey || !secretKey) {
+    throw new Error('Kling API key format must be "accessKey:secretKey"');
+  }
+  return { accessKey, secretKey };
+}
+
+async function klingPoll(jwt: string, taskId: string): Promise<string> {
+  for (let attempt = 0; attempt < 120; attempt++) {
+    await new Promise((r) => setTimeout(r, 5000));
+    const res = await fetch(`${KLING_BASE}/videos/text2video/${taskId}`, {
+      headers: { Authorization: `Bearer ${jwt}` },
+    });
+    if (!res.ok) continue;
+    const json = (await res.json()) as { data: KlingTaskResult };
+    const task = json?.data;
+    if (task?.task_status === 'succeed') {
+      const url = task?.task_result?.videos?.[0]?.url;
+      if (!url) throw new Error('Kling AI: task succeeded but no video URL');
+      return url;
+    }
+    if (task?.task_status === 'failed') {
+      throw new Error('Kling AI: video generation failed');
+    }
+  }
+  throw new Error('Kling AI: generation timed out after 10 minutes');
+}
+
 @ThirdParty({
   identifier: 'klingai',
   title: 'Kling AI',
   description:
-    'Generate stunning AI videos from text or images with Kling's state-of-the-art video generation models.',
+    "Generate stunning AI videos from text or images with Kling's state-of-the-art video generation models.",
   position: 'media',
   fields: [],
 })
 export class KlingAiProvider extends ThirdPartyAbstract {
-  private _buildJwt(accessKey: string, secretKey: string): string {
-    const now = Math.floor(Date.now() / 1000);
-    const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
-    const payload = Buffer.from(
-      JSON.stringify({ iss: accessKey, exp: now + 1800, nbf: now - 5 })
-    ).toString('base64url');
-
-    const { createHmac } = require('crypto');
-    const sig = createHmac('sha256', secretKey)
-      .update(`${header}.${payload}`)
-      .digest('base64url');
-
-    return `${header}.${payload}.${sig}`;
-  }
-
-  private _parseKey(apiKey: string): { accessKey: string; secretKey: string } {
-    const [accessKey, secretKey] = apiKey.split(':');
-    if (!accessKey || !secretKey) {
-      throw new Error('Kling API key format must be "accessKey:secretKey"');
-    }
-    return { accessKey, secretKey };
-  }
-
   async checkConnection(
     apiKey: string
   ): Promise<false | { name: string; username: string; id: string }> {
     try {
-      const { accessKey, secretKey } = this._parseKey(apiKey);
-      const jwt = this._buildJwt(accessKey, secretKey);
+      const { accessKey, secretKey } = klingParseKey(apiKey);
+      const jwt = klingBuildJwt(accessKey, secretKey);
 
       const res = await fetch(`${KLING_BASE}/account/costs`, {
         headers: { Authorization: `Bearer ${jwt}` },
@@ -66,8 +85,8 @@ export class KlingAiProvider extends ThirdPartyAbstract {
   }
 
   async sendData(apiKey: string, data: any): Promise<string> {
-    const { accessKey, secretKey } = this._parseKey(apiKey);
-    const jwt = this._buildJwt(accessKey, secretKey);
+    const { accessKey, secretKey } = klingParseKey(apiKey);
+    const jwt = klingBuildJwt(accessKey, secretKey);
 
     const body: Record<string, any> = {
       model_name: data?.model || 'kling-v1.5-pro',
@@ -105,34 +124,7 @@ export class KlingAiProvider extends ThirdPartyAbstract {
     const taskId = json?.data?.task_id;
     if (!taskId) throw new Error('Kling AI: no task_id returned');
 
-    return this._poll(jwt, taskId);
-  }
-
-  private async _poll(jwt: string, taskId: string): Promise<string> {
-    for (let attempt = 0; attempt < 120; attempt++) {
-      await new Promise((r) => setTimeout(r, 5000));
-
-      const res = await fetch(`${KLING_BASE}/videos/text2video/${taskId}`, {
-        headers: { Authorization: `Bearer ${jwt}` },
-      });
-
-      if (!res.ok) continue;
-
-      const json = (await res.json()) as { data: KlingTaskResult };
-      const task = json?.data;
-
-      if (task?.task_status === 'succeed') {
-        const url = task?.task_result?.videos?.[0]?.url;
-        if (!url) throw new Error('Kling AI: task succeeded but no video URL');
-        return url;
-      }
-
-      if (task?.task_status === 'failed') {
-        throw new Error('Kling AI: video generation failed');
-      }
-    }
-
-    throw new Error('Kling AI: generation timed out after 10 minutes');
+    return klingPoll(jwt, taskId);
   }
 
   async models(apiKey: string) {

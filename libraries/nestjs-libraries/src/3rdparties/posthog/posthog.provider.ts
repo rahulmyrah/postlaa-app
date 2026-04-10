@@ -3,6 +3,14 @@ import {
   ThirdPartyAbstract,
 } from '@gitroom/nestjs-libraries/3rdparties/thirdparty.interface';
 
+function parsePostHogKey(apiKey: string): { key: string; host: string } {
+  const parts = apiKey.split(':::');
+  return {
+    key: parts[0],
+    host: parts[1] || 'https://app.posthog.com',
+  };
+}
+
 @ThirdParty({
   identifier: 'posthog',
   title: 'PostHog',
@@ -12,18 +20,10 @@ import {
   fields: [],
 })
 export class PostHogProvider extends ThirdPartyAbstract {
-  private _parse(apiKey: string): { key: string; host: string } {
-    const parts = apiKey.split(':::');
-    return {
-      key: parts[0],
-      host: parts[1] || 'https://app.posthog.com',
-    };
-  }
-
   async checkConnection(
     apiKey: string
   ): Promise<false | { name: string; username: string; id: string }> {
-    const { key, host } = this._parse(apiKey);
+    const { key, host } = parsePostHogKey(apiKey);
     if (!key || key.length < 8) return false;
 
     const res = await fetch(`${host}/api/projects`, {
@@ -43,7 +43,7 @@ export class PostHogProvider extends ThirdPartyAbstract {
   }
 
   async sendData(apiKey: string, data: any): Promise<string> {
-    const { key, host } = this._parse(apiKey);
+    const { key, host } = parsePostHogKey(apiKey);
     if (!key) return '';
 
     await fetch(`${host}/capture/`, {

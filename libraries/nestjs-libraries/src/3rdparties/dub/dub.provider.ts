@@ -5,6 +5,13 @@ import {
 
 const DUB_BASE = 'https://api.dub.co';
 
+function dubHeaders(apiKey: string): Record<string, string> {
+  return {
+    Authorization: `Bearer ${apiKey}`,
+    'Content-Type': 'application/json',
+  };
+}
+
 @ThirdParty({
   identifier: 'dub',
   title: 'Dub',
@@ -14,18 +21,11 @@ const DUB_BASE = 'https://api.dub.co';
   fields: [],
 })
 export class DubProvider extends ThirdPartyAbstract {
-  private _headers(apiKey: string): Record<string, string> {
-    return {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    };
-  }
-
   async checkConnection(
     apiKey: string
   ): Promise<false | { name: string; username: string; id: string }> {
     const res = await fetch(`${DUB_BASE}/workspaces`, {
-      headers: this._headers(apiKey),
+      headers: dubHeaders(apiKey),
     });
     if (!res.ok) return false;
     const json = await res.json().catch(() => null);
@@ -44,7 +44,7 @@ export class DubProvider extends ThirdPartyAbstract {
 
     const res = await fetch(`${DUB_BASE}/links`, {
       method: 'POST',
-      headers: this._headers(apiKey),
+      headers: dubHeaders(apiKey),
       body: JSON.stringify({ url }),
     });
     if (!res.ok) return url;
