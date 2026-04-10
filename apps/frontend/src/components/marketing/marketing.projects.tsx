@@ -114,6 +114,7 @@ const ProjectWizard: FC<{
       fields: (
         <div className="flex flex-col gap-4">
           <Input
+            disableForm
             name="name"
             label="Project / Brand Name"
             placeholder="e.g. FitFlow App"
@@ -121,6 +122,7 @@ const ProjectWizard: FC<{
             onChange={setInput('name')}
           />
           <Input
+            disableForm
             name="url"
             label="Website or App URL"
             placeholder="https://yourapp.com"
@@ -128,12 +130,12 @@ const ProjectWizard: FC<{
             onChange={setInput('url')}
           />
           <Textarea
+            disableForm
             name="description"
             label="What does your product do? (3-5 sentences)"
             placeholder="FitFlow is a fitness app for busy professionals. It offers 15-minute HIIT workouts..."
             value={form.description}
             onChange={setText('description')}
-
           />
         </div>
       ),
@@ -145,6 +147,7 @@ const ProjectWizard: FC<{
       fields: (
         <div className="flex flex-col gap-4">
           <Input
+            disableForm
             name="niche"
             label="Niche / Industry"
             placeholder="e.g. Health & Fitness, B2B SaaS, E-commerce Fashion"
@@ -152,20 +155,20 @@ const ProjectWizard: FC<{
             onChange={setInput('niche')}
           />
           <Textarea
+            disableForm
             name="targetAudience"
             label="Target Audience"
             placeholder="e.g. Busy professionals aged 28-40, mostly in the US, who want to stay fit without gym membership."
             value={form.targetAudience ?? ''}
             onChange={setText('targetAudience')}
-
           />
           <Textarea
+            disableForm
             name="competitors"
             label="Competitors (optional)"
             placeholder="List 2-5 competitor brands so the AI can find content gaps"
             value={form.competitors ?? ''}
             onChange={setText('competitors')}
-
           />
         </div>
       ),
@@ -177,14 +180,15 @@ const ProjectWizard: FC<{
       fields: (
         <div className="flex flex-col gap-4">
           <Textarea
+            disableForm
             name="brandVoice"
             label="Brand Voice & Tone"
             placeholder="e.g. Professional but approachable. Motivational without being preachy. Plain English, no jargon."
             value={form.brandVoice ?? ''}
             onChange={setText('brandVoice')}
-
           />
           <Input
+            disableForm
             name="brandColors"
             label="Brand Colors (optional)"
             placeholder="e.g. Primary: #6C2BD9 purple, Secondary: white"
@@ -192,12 +196,12 @@ const ProjectWizard: FC<{
             onChange={setInput('brandColors')}
           />
           <Textarea
+            disableForm
             name="goals"
             label="Marketing Goals"
             placeholder="e.g. Drive 500 app downloads/month. Grow Instagram to 10k followers in 6 months."
             value={form.goals ?? ''}
             onChange={setText('goals')}
-
           />
         </div>
       ),
@@ -329,6 +333,7 @@ const CampaignWizard: FC<{
   return (
     <div className="flex flex-col gap-4">
       <Input
+        disableForm
         name="campaignName"
         label="Campaign Name"
         placeholder="e.g. Q2 Growth Push, App Launch Campaign"
@@ -336,6 +341,7 @@ const CampaignWizard: FC<{
         onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
       />
       <Textarea
+        disableForm
         name="campaignGoal"
         label="Campaign Goal"
         placeholder="e.g. Drive 1000 new app downloads in April by building awareness on Instagram and LinkedIn"
@@ -343,7 +349,6 @@ const CampaignWizard: FC<{
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
           setForm((f) => ({ ...f, goal: e.target.value }))
         }
-
       />
       <div className="flex gap-3 pt-2">
         <Button secondary onClick={onClose} className="flex-1">
