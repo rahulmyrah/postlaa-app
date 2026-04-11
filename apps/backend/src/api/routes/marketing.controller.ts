@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
   NotFoundException,
   Param,
   Post,
@@ -15,13 +16,15 @@ import { MarketingProjectService } from '@gitroom/nestjs-libraries/database/pris
 import { CampaignService } from '@gitroom/nestjs-libraries/database/prisma/marketing/campaign.service';
 import { MarketingProjectDto } from '@gitroom/nestjs-libraries/dtos/marketing/marketing-project.dto';
 import { CampaignDto } from '@gitroom/nestjs-libraries/dtos/marketing/campaign.dto';
+import { MarketingTeamOrchestrator } from '@gitroom/nestjs-libraries/agent/marketing.team.orchestrator';
 
 @ApiTags('Marketing')
 @Controller('/marketing')
 export class MarketingController {
   constructor(
     private _projectService: MarketingProjectService,
-    private _campaignService: CampaignService
+    private _campaignService: CampaignService,
+    private _orchestrator: MarketingTeamOrchestrator
   ) {}
 
   // ─── Projects ────────────────────────────────────────────────────────────────
@@ -113,6 +116,37 @@ export class MarketingController {
     const project = await this._projectService.getById(org.id, projectId);
     if (!project) throw new NotFoundException('Project not found');
     return this._campaignService.update(projectId, id, body);
+  }
+
+  @Post('/projects/:projectId/campaigns/:id/run')
+  async runMarketingTeam(
+    @GetOrgFromRequest() org: Organization,
+    @Param('projectId') projectId: string,
+    @Param('id') id: string
+  ) {
+    const project = await this._projectService.getById(org.id, projectId);
+    if (!project) throw new NotFoundException('Project not found');
+
+    const campaign = await this._campaignService.getById(projectId, id);
+    if (!campaign) throw new NotFoundException('Campaign not found');
+
+    return this._orchestrator.run({
+      orgId: org.id,
+      projectId,
+      campaignId: id,
+      project: {
+        url: project.url,
+        niche: project.niche,
+        competitors: (project as any).competitors ?? null,
+        targetAudience: (project as any).targetAudience ?? null,
+        brandVoice: (project as any).brandVoice ?? null,
+        goals: (project as any).goals ?? null,
+      },
+      campaign: {
+        name: campaign.name,
+        goal: campaign.goal ?? '',
+      },
+    });
   }
 
   @Delete('/projects/:projectId/campaigns/:id')

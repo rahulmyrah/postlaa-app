@@ -27,11 +27,21 @@ interface MarketingProject {
   campaigns: Campaign[];
 }
 
+interface ResearchRun {
+  id: string;
+  agentType: string;
+  findings: any;
+  createdAt: string;
+}
+
 interface Campaign {
   id: string;
   name: string;
   goal: string;
   status: 'RESEARCHING' | 'PLANNING' | 'ACTIVE' | 'PAUSED' | 'COMPLETED';
+  brief?: any;
+  contentPlan?: any;
+  researchRuns?: ResearchRun[];
 }
 
 // ─── Hooks ────────────────────────────────────────────────────────────────────
@@ -367,6 +377,136 @@ const CampaignWizard: FC<{
   );
 };
 
+// ─── Agent metadata ───────────────────────────────────────────────────────────
+
+const agentLabels: Record<string, { label: string; icon: string }> = {
+  keyword_strategist: { label: 'Keyword Strategist', icon: '🎯' },
+  technical_auditor: { label: 'Technical SEO Auditor', icon: '🔍' },
+  growth_agent: { label: 'Growth Agent', icon: '📈' },
+  auto_optimizer: { label: 'Auto Optimizer', icon: '⚡' },
+  seo_content_creator: { label: 'SEO Content Creator', icon: '✍️' },
+  ai_visibility: { label: 'AI Visibility Agent', icon: '🤖' },
+};
+
+// ─── Campaign Run Card ────────────────────────────────────────────────────────
+
+const CampaignRunCard: FC<{
+  campaign: Campaign;
+  projectId: string;
+  onRefresh: () => void;
+}> = ({ campaign, projectId, onRefresh }) => {
+  const fetch = useFetch();
+  const toaster = useToaster();
+  const [running, setRunning] = useState(false);
+  const [expanded, setExpanded] = useState<string | null>(null);
+
+  const handleRun = useCallback(async () => {
+    setRunning(true);
+    try {
+      const res = await fetch(
+        `/marketing/projects/${projectId}/campaigns/${campaign.id}/run`,
+        { method: 'POST' }
+      );
+      if (!res.ok) throw new Error();
+      await onRefresh();
+      toaster.show('AI team completed! Your campaign plan is ready.', 'success');
+    } catch {
+      toaster.show(
+        'Failed to run AI team. Check your connected integrations.',
+        'warning'
+      );
+    } finally {
+      setRunning(false);
+    }
+  }, [campaign.id, projectId, fetch, onRefresh, toaster]);
+
+  const isRunning = running || campaign.status === 'RESEARCHING';
+  const hasResults =
+    campaign.researchRuns && campaign.researchRuns.length > 0;
+
+  return (
+    <div className="bg-[var(--new-bgColorInner)] border border-[var(--new-border)] rounded-xl overflow-hidden">
+      <div className="p-4 flex justify-between items-start gap-4">
+        <div className="flex flex-col gap-1 flex-1 min-w-0">
+          <span className="font-medium text-[rgb(var(--new-textColor))]">
+            {campaign.name}
+          </span>
+          <span className="text-sm text-[var(--new-textItemBlur)] line-clamp-2">
+            {campaign.goal}
+          </span>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <StatusBadge status={campaign.status} />
+          <Button
+            loading={isRunning}
+            onClick={handleRun}
+            className="text-xs !py-1 !px-3"
+          >
+            {isRunning
+              ? 'Running…'
+              : hasResults
+              ? '↺ Re-run AI Team'
+              : '▶ Run AI Team'}
+          </Button>
+        </div>
+      </div>
+
+      {isRunning && (
+        <div className="px-4 pb-3">
+          <div className="bg-[var(--new-btn-primary)]/10 rounded-lg p-3">
+            <p className="text-xs text-[var(--new-btn-primary)] animate-pulse">
+              6 agents working… Keyword research → Technical audit → Growth
+              intel → Optimization → Content plan → AI visibility
+            </p>
+          </div>
+        </div>
+      )}
+
+      {hasResults && !isRunning && (
+        <div className="border-t border-[var(--new-sep)]">
+          {campaign.researchRuns!.map((run) => {
+            const meta = agentLabels[run.agentType] ?? {
+              label: run.agentType,
+              icon: '🤖',
+            };
+            const isOpen = expanded === run.id;
+            return (
+              <div
+                key={run.id}
+                className="border-b border-[var(--new-sep)] last:border-0"
+              >
+                <button
+                  className="w-full flex justify-between items-center px-4 py-2.5 text-sm hover:bg-[var(--new-btn-simple)]/30 transition-colors text-left"
+                  onClick={() => setExpanded(isOpen ? null : run.id)}
+                >
+                  <span className="flex items-center gap-2">
+                    <span>{meta.icon}</span>
+                    <span className="text-[rgb(var(--new-textColor))]">
+                      {meta.label}
+                    </span>
+                  </span>
+                  <span className="text-[var(--new-textItemBlur)] text-xs">
+                    {isOpen ? '▲' : '▼'}
+                  </span>
+                </button>
+                {isOpen && (
+                  <div className="px-4 pb-3">
+                    <pre className="text-xs text-[var(--new-textItemBlur)] bg-black/20 rounded-lg p-3 overflow-auto max-h-72 whitespace-pre-wrap">
+                      {typeof run.findings === 'string'
+                        ? run.findings
+                        : JSON.stringify(run.findings, null, 2)}
+                    </pre>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
 // ─── Project Card ─────────────────────────────────────────────────────────────
 
 const ProjectCard: FC<{
@@ -476,7 +616,7 @@ const ProjectDetail: FC<{
   onBack: () => void;
   onEdit: () => void;
 }> = ({ project, onBack, onEdit }) => {
-  const { data: campaigns } = useCampaigns(project.id);
+  const { data: campaigns, mutate: mutateCampaigns } = useCampaigns(project.id);
   const modal = useModals();
 
   const openCampaignModal = useCallback(() => {
@@ -562,35 +702,15 @@ const ProjectDetail: FC<{
       ) : (
         <div className="flex flex-col gap-3">
           {campaigns.map((campaign) => (
-            <div
+            <CampaignRunCard
               key={campaign.id}
-              className="bg-[var(--new-bgColorInner)] border border-[var(--new-border)] rounded-xl p-4 flex justify-between items-start"
-            >
-              <div className="flex flex-col gap-1">
-                <span className="font-medium text-[rgb(var(--new-textColor))]">
-                  {campaign.name}
-                </span>
-                <span className="text-sm text-[var(--new-textItemBlur)] line-clamp-2">
-                  {campaign.goal}
-                </span>
-              </div>
-              <StatusBadge status={campaign.status} />
-            </div>
+              campaign={campaign}
+              projectId={project.id}
+              onRefresh={() => mutateCampaigns()}
+            />
           ))}
         </div>
       )}
-
-      <div className="bg-[var(--new-btn-primary)]/5 border border-[var(--new-btn-primary)]/20 rounded-xl p-4">
-        <p className="text-sm text-[var(--new-textItemBlur)]">
-          <span className="text-[var(--new-btn-primary)] font-medium">
-            Tip:
-          </span>{' '}
-          Open the AI agent and say{' '}
-          <span className="italic">"Plan marketing for [Campaign Name]"</span> —
-          the agent will research your niche, build a content strategy, and
-          schedule posts automatically.
-        </p>
-      </div>
     </div>
   );
 };
