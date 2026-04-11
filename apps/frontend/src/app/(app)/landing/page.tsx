@@ -60,7 +60,7 @@ const agentRoles = [
     title: 'Keyword Strategist',
     humanRole: 'CMO + SEO Strategist',
     humanCost: '$80,000–$140,000 / year',
-    poweredBy: ['Semrush', 'Ahrefs', 'Google Trends'],
+    poweredBy: ['DataForSEO', 'Semrush', 'Ahrefs', 'Google Trends'],
     whatItDoes: [
       'Finds high-ROI keyword clusters across search & social with Semrush',
       'Analyses competitor content gaps with Ahrefs Site Explorer',
@@ -76,7 +76,7 @@ const agentRoles = [
     title: 'SEO Content Creator',
     humanRole: 'Content Writer + SEO Copywriter',
     humanCost: '$50,000–$80,000 / year',
-    poweredBy: ['Surfer SEO', 'Frase', 'GPT-4o'],
+    poweredBy: ['DataForSEO', 'Surfer SEO', 'Frase', 'GPT-4o'],
     whatItDoes: [
       'Writes Surfer SEO-optimised long-form articles that rank page 1',
       'Uses Frase to generate NLP-based content briefs with full topic coverage',
@@ -92,7 +92,7 @@ const agentRoles = [
     title: 'Technical Auditor',
     humanRole: 'Technical SEO Specialist',
     humanCost: '$55,000–$90,000 / year',
-    poweredBy: ['Screaming Frog', 'Google Search Console', 'PageSpeed API'],
+    poweredBy: ['DataForSEO OnPage', 'Screaming Frog', 'Google Search Console', 'PageSpeed API'],
     whatItDoes: [
       'Crawls your entire site like Screaming Frog to find broken links & errors',
       'Audits meta titles, H1 tags, canonical URLs, and schema markup',
@@ -108,7 +108,7 @@ const agentRoles = [
     title: 'Growth Agent',
     humanRole: 'Link Builder + PR Outreach Specialist',
     humanCost: '$55,000–$85,000 / year',
-    poweredBy: ['Ahrefs', 'Outreach APIs', 'RSS Feeds'],
+    poweredBy: ['DataForSEO Backlinks', 'Ahrefs', 'Outreach APIs', 'RSS Feeds'],
     whatItDoes: [
       'Scans Ahrefs for competitor backlinks your brand is missing from',
       'Identifies broken link opportunities on high-DA domains at scale',
@@ -141,7 +141,7 @@ const agentRoles = [
     title: 'Auto Optimizer',
     humanRole: 'Conversion Rate Optimiser + Content Refresher',
     humanCost: '$60,000–$95,000 / year',
-    poweredBy: ['Google Analytics', 'Google Search Console', 'GPT-4o'],
+    poweredBy: ['DataForSEO SERP', 'Google Analytics', 'Google Search Console', 'GPT-4o'],
     whatItDoes: [
       'Revisits every published post every 7–30 days to check for freshness decay',
       'Rewrites titles and meta descriptions based on real CTR data from GSC',
@@ -232,6 +232,7 @@ const uniqueIntegrations = [
     color: '#612BD3',
     icon: '🔎',
     items: [
+      { name: 'DataForSEO',     note: 'Pay-as-you-go SEO backbone' },
       { name: 'Semrush',        note: 'Keyword research & audits' },
       { name: 'Ahrefs',         note: 'Backlinks & competitor gaps' },
       { name: 'Surfer SEO',     note: 'Content scoring & NLP' },
@@ -422,7 +423,7 @@ const faqs = [
   },
   {
     q: 'What tools power each agent? What does it run on?',
-    a: 'Every agent is connected to the industry\'s best tooling — not generic AI. Semrush and Ahrefs for keyword research and competitive analysis. Surfer SEO and Frase for content scoring and NLP briefs. Screaming Frog and Google Search Console for technical auditing. Peec AI and Otterly.ai for AI search visibility tracking across ChatGPT, Perplexity, Gemini, and Copilot. Google Analytics and GSC for CTR-based Auto Optimization. Plus HeyGen, Runway ML, ElevenLabs for creative content, and Mixpanel/PostHog for conversion tracking. Without these, it\'s just a scheduler. With them, it\'s an autonomous marketing company.',
+    a: 'The backbone is DataForSEO — a single pay-as-you-go API key covering SERP data, keyword research, 2.1 trillion backlinks, OnPage crawling (same data as Screaming Frog), rank tracking, and domain analytics. On top of that: Semrush and Ahrefs for competitive analysis; Surfer SEO and Frase for content scoring and NLP briefs; Peec AI and Otterly.ai for AI search visibility tracking across ChatGPT, Perplexity, Gemini, and Copilot; Google Analytics and GSC for CTR-based optimization; HeyGen, Runway ML, ElevenLabs for creative content. Without this stack, it\'s just a scheduler. With it, it\'s an autonomous marketing company.',
   },
   {
     q: 'What is the AI Visibility Agent and why is it a USP?',
@@ -823,6 +824,19 @@ export default function LandingPage() {
             <p className="text-[16px] text-white/50 max-w-[540px] mx-auto">
               Postlaa is the only social media platform with deep AI creation, analytics, newsletter, and automation integrations all in one place.
             </p>
+          </div>
+
+          {/* DataForSEO backbone callout */}
+          <div className="mb-8 rounded-[16px] px-7 py-5 flex flex-col md:flex-row items-start md:items-center gap-4" style={{ background: 'linear-gradient(135deg, rgba(97,43,211,0.12) 0%, rgba(139,92,246,0.08) 100%)', border: '1px solid rgba(97,43,211,0.35)' }}>
+            <div className="flex-shrink-0 w-12 h-12 rounded-[10px] flex items-center justify-center text-xl font-bold text-white" style={{ background: '#612BD3' }}>⚡</div>
+            <div>
+              <div className="text-[14px] font-bold text-white mb-1">
+                DataForSEO — one pay-as-you-go API key that powers all 6 agents
+              </div>
+              <div className="text-[13px] text-white/50 leading-relaxed">
+                SERP data · keyword research · 2.1 trillion backlinks · OnPage crawling · rank tracking · domain analytics — all from a single API. No separate Semrush, Ahrefs, or Screaming Frog subscription required. Pay only for what you query. Used by Samsung, Adobe, HubSpot, and NeilPatel as their SEO data backbone.
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
