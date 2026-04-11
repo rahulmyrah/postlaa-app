@@ -159,72 +159,84 @@ const uniqueIntegrations = [
     category: 'AI Video & Voice',
     color: '#d82d7e',
     icon: '🎬',
+    agentBadge: 'SEO Content Creator',
+    intro: 'Your Content Creator agent transforms written briefs into studio-quality videos, avatar walkthroughs, and voiceovers — automatically, 24/7.',
     items: [
-      { name: 'HeyGen', note: 'AI avatar videos' },
-      { name: 'Runway ML', note: 'AI video generation' },
-      { name: 'Kling AI', note: 'AI video creation' },
-      { name: 'ElevenLabs', note: 'AI voiceover' },
-      { name: 'ReelFarm', note: 'Auto-reels & shorts' },
+      { name: 'HeyGen',     logo: 'HG', logoColor: '#8B5CF6', tagline: 'AI spokesperson videos in 120+ languages', agentUse: 'Generates branded product demos, announcements, and social video ads', built: true },
+      { name: 'Runway ML',  logo: 'RM', logoColor: '#1a1a1a', tagline: 'Text-to-video & image-to-video AI',         agentUse: 'Produces B-roll, cinematic clips, and short-form video from content briefs', built: true },
+      { name: 'Kling AI',   logo: 'KL', logoColor: '#0078FF', tagline: 'High-fidelity AI video creation',           agentUse: 'Creates campaign video content and social reels from text prompts', built: true },
+      { name: 'ElevenLabs', logo: 'EL', logoColor: '#F5A623', tagline: 'Ultra-realistic AI voice in 29 languages',  agentUse: 'Narrates blog posts, ads, and explainers with cloned brand voice', built: true },
+      { name: 'ReelFarm',   logo: 'RF', logoColor: '#00C853', tagline: 'Auto-generates TikTok, Reels & Shorts',     agentUse: 'Chops long-form content into platform-native short clips — zero editing', built: true },
     ],
   },
   {
     category: 'AI Image Generation',
     color: '#8B5CF6',
     icon: '🎨',
+    agentBadge: 'SEO Content Creator',
+    intro: 'Every published post gets a bespoke, on-brand visual. Your Content Creator picks the right model for speed, style, or photorealism — no designer needed.',
     items: [
-      { name: 'Fal.ai', note: 'Ultra-fast AI images' },
-      { name: 'Stability AI', note: 'Stable Diffusion' },
-      { name: 'Google Imagen', note: "Google's image AI" },
-      { name: 'OpenAI DALL-E', note: 'GPT-4 image gen' },
-      { name: 'Replicate', note: 'Open-source models' },
+      { name: 'Fal.ai',        logo: 'FA', logoColor: '#00BFB3', tagline: 'Ultra-fast images with LoRA fine-tuning',  agentUse: 'Generates social graphics and ad creatives in under 3 seconds per image', built: true },
+      { name: 'Stability AI',  logo: 'SA', logoColor: '#8B2252', tagline: 'Stable Diffusion — open-source, total control', agentUse: 'Creates styled brand imagery for a consistent visual identity across channels', built: true },
+      { name: 'Google Imagen', logo: 'GI', logoColor: '#4285F4', tagline: "Google's photorealistic image AI",          agentUse: 'Produces lifelike product shots and lifestyle imagery for paid and organic ads', built: true },
+      { name: 'OpenAI DALL-E', logo: 'OA', logoColor: '#10A37F', tagline: 'GPT-4 native creative image generation',   agentUse: 'Generates concept illustrations, infographics, and data visualisations', built: true },
+      { name: 'Replicate',     logo: 'Re', logoColor: '#FF3300', tagline: 'Run 1,000+ open-source AI models via API', agentUse: 'Accesses specialist models for logos, icons, and unique stylised visuals', built: true },
     ],
   },
   {
     category: 'Analytics & Conversion',
     color: '#0085FF',
     icon: '📊',
+    agentBadge: 'Auto Optimizer',
+    intro: 'The Auto Optimizer reads live analytics to decide what to refresh, which CTAs to swap, and which channels deliver real ROI — not vanity metrics.',
     items: [
-      { name: 'Google Analytics', note: 'Traffic & goals' },
-      { name: 'Mixpanel', note: 'Product analytics' },
-      { name: 'PostHog', note: 'Open-source analytics' },
-      { name: 'Plausible', note: 'Privacy-first analytics' },
-      { name: 'Google Trends', note: 'Trend monitoring' },
+      { name: 'Google Analytics', logo: 'GA', logoColor: '#F9AB00', tagline: 'Industry-standard traffic & conversion tracking', agentUse: 'Traces post → visit → signup paths to calculate true content ROI per channel', built: true },
+      { name: 'Mixpanel',         logo: 'Mx', logoColor: '#7856FF', tagline: 'Event-level product analytics',               agentUse: 'Identifies which social campaigns convert free users to paid — down to the post', built: true },
+      { name: 'PostHog',          logo: 'PH', logoColor: '#F54E00', tagline: 'Open-source analytics — you own your data',   agentUse: 'Tracks A/B test winners and surfaces which content drives activation events', built: true },
+      { name: 'Plausible',        logo: 'Pl', logoColor: '#5850EC', tagline: 'Privacy-first web analytics, GDPR-ready',     agentUse: 'Monitors traffic spikes after posts and finds the highest-ROI publish times', built: true },
+      { name: 'Google Trends',    logo: 'GT', logoColor: '#4285F4', tagline: 'Real-time search trend intelligence',         agentUse: 'Detects rising keyword trends before competitors so agents publish first', built: true },
     ],
   },
   {
     category: 'Newsletter & Blog',
     color: '#FF6719',
     icon: '📰',
+    agentBadge: 'SEO Content Creator',
+    intro: 'Your Content Creator publishes directly to your newsletter and blog — no copy-paste, no formatting fixes, correct meta tags and schema populated automatically.',
     items: [
-      { name: 'Substack', note: 'Newsletter distribution' },
-      { name: 'Beehiiv', note: 'Creator newsletters' },
-      { name: 'Ghost', note: 'Blog publishing' },
-      { name: 'Webflow', note: 'Website CMS' },
-      { name: 'Shopify Blog', note: 'E-commerce content' },
+      { name: 'Substack',     logo: 'SS', logoColor: '#FF6719', tagline: 'Paid newsletter platform — 35M+ readers',    agentUse: 'Auto-publishes SEO articles as newsletters and optimises subject lines for opens', built: true },
+      { name: 'Beehiiv',      logo: 'BH', logoColor: '#1A1A1A', tagline: 'Creator-first newsletter with ad network',   agentUse: 'Distributes content digests and tracks open rates to improve send strategy', built: true },
+      { name: 'Ghost',        logo: 'Gh', logoColor: '#15171A', tagline: 'Open-source headless blog CMS',              agentUse: 'Publishes long-form articles with correct meta tags and JSON-LD schema markup', built: true },
+      { name: 'Webflow',      logo: 'WF', logoColor: '#4353FF', tagline: 'No-code website & CMS builder',             agentUse: 'Pushes blog posts to your Webflow CMS with all SEO fields pre-populated', built: true },
+      { name: 'Shopify Blog', logo: 'SB', logoColor: '#96BF48', tagline: 'E-commerce blog for product SEO',           agentUse: 'Creates product-SEO articles that drive organic traffic straight to your store', built: true },
     ],
   },
   {
     category: 'Design & Assets',
     color: '#FC69FF',
     icon: '🖼️',
+    agentBadge: 'SEO Content Creator',
+    intro: 'Your agents pull from your brand asset library, design in Canva, and serve the right image to the right platform — keeping every post on-brand without human review.',
     items: [
-      { name: 'Canva', note: 'Visual design' },
-      { name: 'Cloudinary', note: 'Media management' },
-      { name: 'Google Docs', note: 'Content drafts' },
-      { name: 'Dropbox', note: 'Asset storage' },
-      { name: 'OneDrive', note: 'Microsoft assets' },
+      { name: 'Canva',       logo: 'Cv', logoColor: '#00C4CC', tagline: 'Online design platform — 100M+ templates', agentUse: 'Creates branded social cards, carousels, and decks from your brand templates', built: true },
+      { name: 'Cloudinary',  logo: 'Cl', logoColor: '#3448C5', tagline: 'AI-powered media management & CDN',        agentUse: 'Auto-resizes and optimises images for every platform spec — perfect ratios every time', built: true },
+      { name: 'Google Docs', logo: 'GD', logoColor: '#4285F4', tagline: 'Collaborative cloud document editing',     agentUse: 'Agents draft long-form content in Docs for team review before live publishing', built: true },
+      { name: 'Dropbox',     logo: 'Db', logoColor: '#0061FE', tagline: 'Team file storage — 700M+ registered users', agentUse: 'Pulls approved brand photos, product shots, and logos for campaign graphics', built: true },
+      { name: 'OneDrive',    logo: 'OD', logoColor: '#0078D4', tagline: 'Microsoft file storage & 365 integration', agentUse: 'Accesses brand files and co-authored content within the Microsoft ecosystem', built: true },
     ],
   },
   {
     category: 'Automation & Distribution',
     color: '#4ade80',
     icon: '⚙️',
+    agentBadge: 'Auto Optimizer + Growth Agent',
+    intro: 'Trigger agent workflows from any event in your stack — a GitHub merge, a sale in Stripe, a competitor publishing. Your agents react in real-time, automatically.',
     items: [
-      { name: 'Blotato', note: 'Multi-platform distribution' },
-      { name: 'Pipedream', note: 'Workflow automation' },
-      { name: 'n8n', note: 'Self-hosted automation' },
-      { name: 'Make.com', note: 'No-code workflows' },
-      { name: 'Zapier', note: 'App connectivity' },
+      { name: 'Blotato',   logo: 'Bl', logoColor: '#7C3AED', tagline: 'Multi-platform content distribution engine', agentUse: 'Syndicates every post to 50+ platforms simultaneously — zero manual steps', built: true },
+      { name: 'Pipedream', logo: 'Pd', logoColor: '#02BBE7', tagline: 'Developer-first workflow automation',        agentUse: 'Connects agents to CRM, billing, and product events for trigger-based posting', built: true },
+      { name: 'n8n',       logo: 'n8', logoColor: '#EA4B71', tagline: 'Self-hosted (your data stays on-prem) automation', agentUse: 'Builds complex multi-agent pipelines on your own infrastructure — no SaaS lock-in', built: true },
+      { name: 'Make.com',  logo: 'Mk', logoColor: '#6D00CC', tagline: 'Visual no-code workflow builder',           agentUse: 'Drag-and-drop automations that launch campaigns from any app or webhook event', built: true },
+      { name: 'Zapier',    logo: 'Zp', logoColor: '#FF4A00', tagline: '7,000+ app integrations — zero code',      agentUse: 'Connects Postlaa to any tool in your stack via Zapier\'s massive app library', built: true },
     ],
   },
   {
@@ -232,34 +244,39 @@ const uniqueIntegrations = [
     color: '#612BD3',
     icon: '🔎',
     byoa: true,
+    agentBadge: 'Keyword Strategist · Technical Auditor · Growth Agent · Auto Optimizer',
+    intro: 'Connect the SEO subscriptions you already pay for. No subscriptions? DataForSEO covers everything pay-as-you-go — fractions of a cent per call, not $100+/month flat.',
     items: [
-      { name: 'DataForSEO',          note: 'Default · pay-as-you-go',      built: true },
-      { name: 'Semrush',             note: 'Keyword research & audits',     built: true },
-      { name: 'Ahrefs',              note: 'Backlinks & competitor gaps',   built: true },
-      { name: 'Surfer SEO',          note: 'Content score & NLP',           built: true },
-      { name: 'Moz Pro',             note: 'DA · rankings · link explorer' },
-      { name: 'Frase',               note: 'AI content briefs' },
-      { name: 'Screaming Frog',      note: 'Technical site crawler' },
-      { name: 'SE Ranking',          note: 'Rank tracking & on-page' },
-      { name: 'Mangools',            note: 'KWFinder · SERPChecker' },
-      { name: 'SpyFu',               note: 'Competitor keyword spy' },
-      { name: 'Majestic',            note: 'Trust Flow · backlink data' },
-      { name: 'Serpstat',            note: 'All-in-one SEO platform' },
-      { name: 'Clearscope',          note: 'Content optimisation' },
-      { name: 'MarketMuse',          note: 'Content intelligence' },
-      { name: 'Google Search Console', note: 'Free · official rank data' },
+      { name: 'DataForSEO',           logo: 'DF',  logoColor: '#1A73E8', tagline: 'Pay-as-you-go SEO API backbone',                   agentUse: 'Powers all SEO agents: SERP · 2.1T backlinks · OnPage · rank tracking · domain analytics', built: true },
+      { name: 'Semrush',              logo: 'SR',  logoColor: '#FF642D', tagline: '#1 SEO platform — 20B+ keywords indexed',          agentUse: 'Keyword Strategist pulls competitor gaps, domain analytics, and keyword volumes', built: true },
+      { name: 'Ahrefs',               logo: 'AH',  logoColor: '#FF7043', tagline: "World's largest backlink index",                   agentUse: 'Growth Agent finds competitor link gaps, DR scores, and broken link opportunities', built: true },
+      { name: 'Surfer SEO',           logo: 'SF',  logoColor: '#3FCF8E', tagline: 'Real-time SERP-based content optimisation',        agentUse: 'Content Creator scores every article vs. top-10 competitors before publish', built: true },
+      { name: 'Moz Pro',              logo: 'Mz',  logoColor: '#4B32C3', tagline: 'Domain Authority · Keyword Explorer · Link Explorer', agentUse: 'Technical Auditor tracks DA trends and on-page authority signals over time' },
+      { name: 'Frase',                logo: 'Fr',  logoColor: '#9C27B0', tagline: 'AI content briefs from real search data',          agentUse: 'Content Creator generates structured briefs from Frase\'s NLP topic research' },
+      { name: 'Screaming Frog',       logo: 'SC',  logoColor: '#3C8B3C', tagline: 'Technical SEO site crawler for devs',              agentUse: 'Technical Auditor crawls your site for broken links, duplicate meta, and crawl errors' },
+      { name: 'SE Ranking',           logo: 'SE',  logoColor: '#4285F4', tagline: 'All-in-one rank tracker + on-page audit',          agentUse: 'Tracks daily keyword positions and surfaces ranking drops before traffic falls' },
+      { name: 'Mangools',             logo: 'Mn',  logoColor: '#E53935', tagline: 'KWFinder · SERPChecker · LinkMiner suite',         agentUse: 'Keyword Strategist mines long-tail keywords with low KD and high opportunity' },
+      { name: 'SpyFu',                logo: 'Sp',  logoColor: '#FF7043', tagline: 'Competitor keyword and PPC spy tool',              agentUse: 'Growth Agent reverse-engineers competitor keyword strategies for content targeting' },
+      { name: 'Majestic',             logo: 'Mj',  logoColor: '#C62828', tagline: 'Trust Flow · Citation Flow · backlink quality',    agentUse: 'Growth Agent scores link quality with Trust Flow before deciding outreach targets' },
+      { name: 'Serpstat',             logo: 'St',  logoColor: '#00BFA5', tagline: 'Full-suite SEO, PPC, and content platform',        agentUse: 'Keyword Strategist maps cluster opportunities and monitors rank distribution changes' },
+      { name: 'Clearscope',           logo: 'Cs',  logoColor: '#6200EA', tagline: 'Content grading for organic growth',               agentUse: 'Content Creator meets Clearscope grade targets, ensuring every article ranks' },
+      { name: 'MarketMuse',           logo: 'MM',  logoColor: '#1565C0', tagline: 'AI-powered content planning platform',             agentUse: 'Keyword Strategist builds topic authority maps using MarketMuse AI models' },
+      { name: 'Google Search Console', logo: 'GSC', logoColor: '#4285F4', tagline: 'Free · official Google index & ranking data',    agentUse: 'Auto Optimizer reads live CTR data to rewrite titles and meta descriptions weekly', built: true },
     ],
   },
   {
     category: 'AI Visibility (GEO)',
     color: '#FC69FF',
     icon: '🤖',
+    badge: '🔥 USP',
+    agentBadge: 'AI Visibility Agent',
+    intro: 'The only marketing platform that tracks your brand inside AI-generated answers. Connect Peec AI and Otterly.ai to measure your Share of AI Voice — and grow it.',
     items: [
-      { name: 'Peec AI',       note: 'LLM brand visibility tracking', built: true },
-      { name: 'Otterly.ai',    note: 'AI search cite monitoring',      built: true },
-      { name: 'Perplexity',    note: 'Real-time AI research',          built: true },
-      { name: 'NewsAPI',       note: 'Trending news feed',             built: true },
-      { name: 'Google Trends', note: 'Search trend signals',           built: true },
+      { name: 'Peec AI',        logo: 'PA', logoColor: '#7C3AED', tagline: 'LLM brand visibility tracker — $29M funded',      agentUse: 'Measures Visibility Score, Position & Sentiment across ChatGPT, Gemini, Perplexity, Copilot', built: true },
+      { name: 'Otterly.ai',     logo: 'OT', logoColor: '#00BCD4', tagline: 'AI search monitoring — Gartner Cool Vendor 2025', agentUse: 'Tracks brand citations in AI answers and your Share of AI Voice vs. competitors', built: true },
+      { name: 'Perplexity',     logo: 'Px', logoColor: '#20808D', tagline: 'AI answer engine — 15M+ daily active users',      agentUse: 'Agents research real-time competitor mentions and trending topics in AI answers', built: true },
+      { name: 'NewsAPI',        logo: 'NA', logoColor: '#02275A', tagline: 'Real-time news from 80,000+ global sources',      agentUse: 'AI Visibility Agent monitors brand mentions in news to ride trending peaks', built: true },
+      { name: 'Google Trends',  logo: 'GT', logoColor: '#4285F4', tagline: 'Search interest data direct from Google',         agentUse: 'Keyword Strategist detects interest spikes so your agents publish before they peak', built: true },
     ],
   },
 ];
@@ -821,73 +838,153 @@ export default function LandingPage() {
       {/* ── Unique Integrations ── */}
       <section id="integrations" className="py-[100px] px-6">
         <div className="max-w-[1200px] mx-auto">
-          <div className="text-center mb-14">
+
+          {/* Header */}
+          <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-[#1A1919] border border-[#FC69FF]/40 rounded-full px-4 py-1.5 text-[13px] text-[#FC69FF] mb-5">
-              50+ integrations — most not available in any competitor
+              52+ integrations — connect once, your AI team uses them forever
             </div>
             <h2 className="text-[38px] md:text-[52px] font-bold mb-4" style={{ letterSpacing: '-2px' }}>
-              Connected to every tool{' '}
+              Connect your tools.{' '}
               <span style={{ background: 'linear-gradient(135deg, #FC69FF 0%, #8B5CF6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                your team uses
+                Your AI team activates.
               </span>
             </h2>
-            <p className="text-[16px] text-white/50 max-w-[600px] mx-auto">
-              Already have Semrush, Ahrefs, or Surfer SEO? Connect your existing account. No subscription? Use DataForSEO as the default SEO backbone — pay only per query. Postlaa is the platform; you choose the tools.
+            <p className="text-[16px] text-white/50 max-w-[680px] mx-auto leading-relaxed">
+              Every tool below becomes a live capability your 6 AI agents can call on. Already have Semrush, Ahrefs, or Surfer SEO? Paste your API key. No subs? DataForSEO works pay-as-you-go. Either way your agents start working immediately.
             </p>
           </div>
 
-          {/* DataForSEO backbone callout */}
-          <div className="mb-4 rounded-[16px] px-7 py-5 flex flex-col md:flex-row items-start md:items-center gap-4" style={{ background: 'linear-gradient(135deg, rgba(97,43,211,0.12) 0%, rgba(139,92,246,0.08) 100%)', border: '1px solid rgba(97,43,211,0.35)' }}>
-            <div className="flex-shrink-0 w-12 h-12 rounded-[10px] flex items-center justify-center text-xl font-bold text-white" style={{ background: '#612BD3' }}>⚡</div>
-            <div>
-              <div className="text-[14px] font-bold text-white mb-1">
-                Bring your own tools — or let Postlaa use DataForSEO as the default
+          {/* Connection flow diagram */}
+          <div className="mb-12 rounded-[20px] p-6 md:p-8" style={{ background: 'linear-gradient(135deg, rgba(97,43,211,0.10) 0%, rgba(252,105,255,0.06) 100%)', border: '1px solid rgba(139,92,246,0.25)' }}>
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-center">
+              <div className="flex-1">
+                <div className="text-[13px] font-bold text-white/40 uppercase tracking-widest mb-3">Your existing tools</div>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {['Semrush', 'Ahrefs', 'HeyGen', 'Canva', 'GA4', 'Peec AI'].map((t) => (
+                    <span key={t} className="text-[12px] px-3 py-1.5 rounded-full bg-[#1a1a1a] border border-[#333] text-white/70 font-medium">{t}</span>
+                  ))}
+                </div>
               </div>
-              <div className="text-[13px] text-white/50 leading-relaxed">
-                Already paying for Semrush, Ahrefs, Surfer SEO, or Moz? Connect your API key and Postlaa agents will use your existing subscription data. No SEO tool subscriptions at all? DataForSEO is the built-in pay-as-you-go backbone — SERP data · 2.1T backlinks · OnPage crawling · rank tracking — you pay fractions of a cent per query, not $100+/month flat.
+              <div className="flex flex-col items-center gap-2 flex-shrink-0">
+                <div className="hidden md:flex items-center gap-2 text-[#8B5CF6]">
+                  <div className="w-16 h-px bg-gradient-to-r from-transparent to-[#8B5CF6]" />
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                </div>
+                <div className="bg-[#612BD3] text-white text-[12px] font-bold px-4 py-2 rounded-[8px] whitespace-nowrap">Paste API key → Done</div>
+                <div className="hidden md:flex items-center gap-2 text-[#8B5CF6]">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                  <div className="w-16 h-px bg-gradient-to-l from-transparent to-[#8B5CF6]" />
+                </div>
+              </div>
+              <div className="flex-1">
+                <div className="text-[13px] font-bold text-white/40 uppercase tracking-widest mb-3">Your AI marketing team</div>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {['Keyword Strategist', 'SEO Content Creator', 'Growth Agent', 'AI Visibility Agent'].map((a) => (
+                    <span key={a} className="text-[12px] px-3 py-1.5 rounded-full border border-[#612BD3]/50 text-[#8B5CF6] font-medium" style={{ background: '#612BD318' }}>{a}</span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-          {/* Live integration legend */}
-          <div className="mb-8 flex items-center gap-4 text-[12px] text-white/40">
-            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#4ade80]" /> Live integration — provider built &amp; active</span>
-            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#555]" /> Coming soon — BYOA connection in progress</span>
+
+          {/* DataForSEO BYOA callout */}
+          <div className="mb-4 rounded-[16px] px-6 py-4 flex flex-col md:flex-row items-start md:items-center gap-4" style={{ background: 'linear-gradient(135deg, rgba(97,43,211,0.14) 0%, rgba(139,92,246,0.08) 100%)', border: '1px solid rgba(97,43,211,0.40)' }}>
+            <div className="flex-shrink-0 w-10 h-10 rounded-[8px] flex items-center justify-center text-lg font-bold text-white" style={{ background: '#612BD3' }}>⚡</div>
+            <div>
+              <span className="text-[14px] font-bold text-white">No SEO tool subscriptions?</span>
+              <span className="text-[13px] text-white/50 ml-2">DataForSEO is the built-in default — SERP · 2.1 trillion backlinks · OnPage crawl · rank tracking. You pay fractions of a cent per query, not $100+/month flat. Get full SEO agent power from day one.</span>
+            </div>
+          </div>
+          {/* Legend */}
+          <div className="mb-10 flex items-center gap-5 text-[12px] text-white/35">
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#4ade80]" /> Live — provider built &amp; active</span>
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#444]" /> Coming soon — BYOA connection in progress</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {/* Category sections */}
+          <div className="space-y-10">
             {uniqueIntegrations.map((cat) => (
-              <div key={cat.category} className="bg-[#111111] border border-[#252525] rounded-[16px] p-5 hover:border-[#612BD3]/40 transition-colors">
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[22px]">{cat.icon}</span>
-                    <span className="text-[12px] font-bold tracking-wider" style={{ color: cat.color }}>{cat.category}</span>
+              <div key={cat.category} className="rounded-[20px] border border-[#252525] overflow-hidden hover:border-[#303030] transition-colors" style={{ background: '#0d0d0d' }}>
+
+                {/* Category header */}
+                <div className="px-6 py-5 border-b border-[#1e1e1e]" style={{ background: `linear-gradient(135deg, ${cat.color}0C 0%, transparent 60%)` }}>
+                  <div className="flex flex-col md:flex-row md:items-start gap-3">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <span className="text-[26px] flex-shrink-0">{cat.icon}</span>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                          <span className="text-[16px] font-bold" style={{ color: cat.color }}>{cat.category}</span>
+                          {'byoa' in cat && cat.byoa && (
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ color: cat.color, background: cat.color + '18', border: `1px solid ${cat.color}35` }}>🔑 BYOA</span>
+                          )}
+                          {'badge' in cat && cat.badge && (
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FC69FF]/15 text-[#FC69FF] border border-[#FC69FF]/30">{(cat as any).badge}</span>
+                          )}
+                        </div>
+                        <p className="text-[13px] text-white/45 leading-relaxed">{cat.intro}</p>
+                      </div>
+                    </div>
+                    <div className="flex-shrink-0">
+                      <div className="text-[10px] font-bold text-white/30 uppercase tracking-wide mb-1">Used by agents</div>
+                      <div className="text-[11px] font-semibold" style={{ color: cat.color }}>{cat.agentBadge}</div>
+                    </div>
                   </div>
-                  {'byoa' in cat && cat.byoa && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap" style={{ color: cat.color, background: (cat.color as string) + '18', border: `1px solid ${cat.color as string}35` }}>🔑 BYOA</span>
-                  )}
                 </div>
-                <ul className="space-y-2">
-                  {cat.items.map((item) => (
-                    <li key={item.name} className="flex items-center justify-between gap-2">
-                      <span className="flex items-center gap-1.5 text-[12px] font-medium text-white/80 leading-snug">
-                        {'built' in item && item.built && (
-                          <span title="Live integration" className="w-1.5 h-1.5 rounded-full bg-[#4ade80] flex-shrink-0 mt-px" />
-                        )}
-                        {item.name}
-                      </span>
-                      <span className="text-[10px] text-white/30 text-right leading-snug flex-shrink-0 max-w-[90px]">{item.note}</span>
-                    </li>
-                  ))}
-                </ul>
+
+                {/* Tool cards grid */}
+                <div className="p-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                    {cat.items.map((item) => (
+                      <div
+                        key={item.name}
+                        className="flex flex-col gap-3 rounded-[14px] p-4 border transition-all hover:border-[#353535] bg-[#111111]"
+                        style={{ borderColor: '#1e1e1e' }}
+                      >
+                        {/* Logo row */}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2.5">
+                            <div
+                              className="w-9 h-9 rounded-[8px] flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0"
+                              style={{ background: item.logoColor }}
+                            >
+                              {item.logo}
+                            </div>
+                            <div>
+                              <div className="text-[13px] font-semibold text-white leading-tight">{item.name}</div>
+                            </div>
+                          </div>
+                          {'built' in item && item.built
+                            ? <span title="Live integration" className="flex items-center gap-1 text-[10px] font-semibold text-[#4ade80]"><span className="w-1.5 h-1.5 rounded-full bg-[#4ade80]" />Live</span>
+                            : <span title="Coming soon" className="flex items-center gap-1 text-[10px] font-semibold text-white/25"><span className="w-1.5 h-1.5 rounded-full bg-[#444]" />Soon</span>
+                          }
+                        </div>
+
+                        {/* Tagline */}
+                        <div className="text-[11px] text-white/45 leading-snug">{item.tagline}</div>
+
+                        {/* Agent use */}
+                        <div className="pt-2 border-t border-[#1e1e1e]">
+                          <div className="text-[10px] font-bold uppercase tracking-wide mb-1" style={{ color: cat.color }}>Your agents use this to</div>
+                          <div className="text-[12px] text-white/65 leading-snug">{item.agentUse}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
 
-          <div className="mt-12 rounded-[16px] px-8 py-6 text-center" style={{ background: 'linear-gradient(135deg, rgba(252,105,255,0.08) 0%, rgba(139,92,246,0.08) 100%)', border: '1px solid rgba(252,105,255,0.2)' }}>
-            <p className="text-[15px] text-white/60">
-              <span className="text-white font-semibold">Postlaa is the platform. You choose the tools.</span>{' '}
-              Already have Semrush, Ahrefs, Moz, Surfer SEO, or Screaming Frog? Connect your account and Postlaa agents use your data. No subscriptions? DataForSEO covers everything pay-as-you-go. Either way, you get the same autonomous marketing power — at a fraction of the cost of running these tools separately.
-            </p>
+          {/* Bottom CTA */}
+          <div className="mt-12 rounded-[20px] px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6" style={{ background: 'linear-gradient(135deg, rgba(97,43,211,0.15) 0%, rgba(252,105,255,0.08) 100%)', border: '1px solid rgba(139,92,246,0.30)' }}>
+            <div>
+              <div className="text-[20px] font-bold mb-1">Ready to connect your tool stack?</div>
+              <div className="text-[14px] text-white/50">One API key per tool. Your agents activate instantly. No re-configuration. No extra fees.</div>
+            </div>
+            <Link href="/auth" className="flex-shrink-0 inline-flex items-center gap-2 bg-[#612BD3] hover:bg-[#7c3fe8] transition-colors text-white text-[14px] font-semibold px-7 py-3.5 rounded-[10px]">
+              Set up your AI team →
+            </Link>
           </div>
         </div>
       </section>
