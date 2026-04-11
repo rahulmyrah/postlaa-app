@@ -231,13 +231,23 @@ const uniqueIntegrations = [
     category: 'SEO Tools',
     color: '#612BD3',
     icon: '🔎',
+    byoa: true,
     items: [
-      { name: 'DataForSEO',     note: 'Pay-as-you-go SEO backbone' },
-      { name: 'Semrush',        note: 'Keyword research & audits' },
-      { name: 'Ahrefs',         note: 'Backlinks & competitor gaps' },
-      { name: 'Surfer SEO',     note: 'Content scoring & NLP' },
-      { name: 'Frase',          note: 'AI content briefs' },
-      { name: 'Screaming Frog', note: 'Technical site crawling' },
+      { name: 'DataForSEO',          note: 'Default · pay-as-you-go' },
+      { name: 'Semrush',             note: 'Keyword research & audits' },
+      { name: 'Ahrefs',              note: 'Backlinks & competitor gaps' },
+      { name: 'Moz Pro',             note: 'DA · rankings · link explorer' },
+      { name: 'Surfer SEO',          note: 'Content score & NLP' },
+      { name: 'Frase',               note: 'AI content briefs' },
+      { name: 'Screaming Frog',      note: 'Technical site crawler' },
+      { name: 'SE Ranking',          note: 'Rank tracking & on-page' },
+      { name: 'Mangools',            note: 'KWFinder · SERPChecker' },
+      { name: 'SpyFu',               note: 'Competitor keyword spy' },
+      { name: 'Majestic',            note: 'Trust Flow · backlink data' },
+      { name: 'Serpstat',            note: 'All-in-one SEO platform' },
+      { name: 'Clearscope',          note: 'Content optimisation' },
+      { name: 'MarketMuse',          note: 'Content intelligence' },
+      { name: 'Google Search Console', note: 'Free · official rank data' },
     ],
   },
   {
@@ -443,7 +453,7 @@ const faqs = [
   },
   {
     q: 'What integrations does Postlaa have that others don\'t?',
-    a: 'Postlaa is the only scheduling platform connected to: Semrush, Ahrefs, Surfer SEO, Frase, Screaming Frog, Peec AI, Otterly.ai, HeyGen (AI avatar videos), Runway ML, Kling AI, ElevenLabs (voice), Fal.ai + Stability AI + Google Imagen (images), ReelFarm (auto-reels), Canva, Cloudinary, Blotato (distribution), Substack, Beehiiv, Ghost, Webflow, Mixpanel, PostHog, Plausible, and Pipedream — 50+ integrations. None of these are available in Postiz, Buffer, Hootsuite, or Later.',
+    a: 'Two layers: (1) Built-in AI creation — HeyGen, Runway ML, Kling AI, ElevenLabs, Fal.ai, Stability AI, Google Imagen, ReelFarm, Canva, Cloudinary, Blotato, Substack, Beehiiv, Ghost, Webflow, Mixpanel, PostHog, Plausible, Pipedream, Peec AI, Otterly.ai — none available in Postiz, Buffer, Hootsuite, or Later. (2) SEO Tools (BYOA — Bring Your Own Account) — connect your existing Semrush, Ahrefs, Moz Pro, Surfer SEO, Frase, Screaming Frog, SE Ranking, Mangools, SpyFu, Majestic, Serpstat, Clearscope, or MarketMuse subscription. No SEO tool subscriptions? DataForSEO is the built-in pay-as-you-go backbone covering all the same data.',
   },
   {
     q: 'How does the MCP server work for AI coding tools?',
@@ -821,8 +831,8 @@ export default function LandingPage() {
                 your team uses
               </span>
             </h2>
-            <p className="text-[16px] text-white/50 max-w-[540px] mx-auto">
-              Postlaa is the only social media platform with deep AI creation, analytics, newsletter, and automation integrations all in one place.
+            <p className="text-[16px] text-white/50 max-w-[600px] mx-auto">
+              Already have Semrush, Ahrefs, or Surfer SEO? Connect your existing account. No subscription? Use DataForSEO as the default SEO backbone — pay only per query. Postlaa is the platform; you choose the tools.
             </p>
           </div>
 
@@ -831,10 +841,10 @@ export default function LandingPage() {
             <div className="flex-shrink-0 w-12 h-12 rounded-[10px] flex items-center justify-center text-xl font-bold text-white" style={{ background: '#612BD3' }}>⚡</div>
             <div>
               <div className="text-[14px] font-bold text-white mb-1">
-                DataForSEO — one pay-as-you-go API key that powers all 6 agents
+                Bring your own tools — or let Postlaa use DataForSEO as the default
               </div>
               <div className="text-[13px] text-white/50 leading-relaxed">
-                SERP data · keyword research · 2.1 trillion backlinks · OnPage crawling · rank tracking · domain analytics — all from a single API. No separate Semrush, Ahrefs, or Screaming Frog subscription required. Pay only for what you query. Used by Samsung, Adobe, HubSpot, and NeilPatel as their SEO data backbone.
+                Already paying for Semrush, Ahrefs, Surfer SEO, or Moz? Connect your API key and Postlaa agents will use your existing subscription data. No SEO tool subscriptions at all? DataForSEO is the built-in pay-as-you-go backbone — SERP data · 2.1T backlinks · OnPage crawling · rank tracking — you pay fractions of a cent per query, not $100+/month flat.
               </div>
             </div>
           </div>
@@ -842,15 +852,20 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {uniqueIntegrations.map((cat) => (
               <div key={cat.category} className="bg-[#111111] border border-[#252525] rounded-[16px] p-5 hover:border-[#612BD3]/40 transition-colors">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-[22px]">{cat.icon}</span>
-                  <span className="text-[12px] font-bold tracking-wider" style={{ color: cat.color }}>{cat.category}</span>
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[22px]">{cat.icon}</span>
+                    <span className="text-[12px] font-bold tracking-wider" style={{ color: cat.color }}>{cat.category}</span>
+                  </div>
+                  {'byoa' in cat && cat.byoa && (
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap" style={{ color: cat.color, background: (cat.color as string) + '18', border: `1px solid ${cat.color as string}35` }}>🔑 BYOA</span>
+                  )}
                 </div>
-                <ul className="space-y-2.5">
+                <ul className="space-y-2">
                   {cat.items.map((item) => (
-                    <li key={item.name} className="flex items-center justify-between">
-                      <span className="text-[13px] font-medium text-white/80">{item.name}</span>
-                      <span className="text-[11px] text-white/30">{item.note}</span>
+                    <li key={item.name} className="flex items-center justify-between gap-2">
+                      <span className="text-[12px] font-medium text-white/80 leading-snug">{item.name}</span>
+                      <span className="text-[10px] text-white/30 text-right leading-snug flex-shrink-0 max-w-[90px]">{item.note}</span>
                     </li>
                   ))}
                 </ul>
@@ -860,8 +875,8 @@ export default function LandingPage() {
 
           <div className="mt-12 rounded-[16px] px-8 py-6 text-center" style={{ background: 'linear-gradient(135deg, rgba(252,105,255,0.08) 0%, rgba(139,92,246,0.08) 100%)', border: '1px solid rgba(252,105,255,0.2)' }}>
             <p className="text-[15px] text-white/60">
-              <span className="text-white font-semibold">Postlaa has the largest integration library of any social scheduling tool.</span>{' '}
-              Semrush, Ahrefs, Surfer SEO, Frase, Screaming Frog, Peec AI, Otterly.ai, HeyGen, Runway ML, ElevenLabs, Mixpanel, PostHog, Beehiiv, Ghost, Blotato, and 40+ more integrations — none available in Postiz, Buffer, Hootsuite, or Later.
+              <span className="text-white font-semibold">Postlaa is the platform. You choose the tools.</span>{' '}
+              Already have Semrush, Ahrefs, Moz, Surfer SEO, or Screaming Frog? Connect your account and Postlaa agents use your data. No subscriptions? DataForSEO covers everything pay-as-you-go. Either way, you get the same autonomous marketing power — at a fraction of the cost of running these tools separately.
             </p>
           </div>
         </div>
