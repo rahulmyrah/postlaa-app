@@ -57,92 +57,99 @@ const agentRoles = [
   {
     icon: '🧠',
     color: '#612BD3',
-    title: 'Strategy Agent',
-    humanRole: 'Marketing Strategist / CMO',
+    title: 'Keyword Strategist',
+    humanRole: 'CMO + SEO Strategist',
     humanCost: '$80,000–$140,000 / year',
+    poweredBy: ['Semrush', 'Ahrefs', 'Google Trends'],
     whatItDoes: [
-      'Builds your content strategy from your product & audience',
-      'Identifies content pillars (Education, Social Proof, Offers, SEO)',
-      'Researches trending topics & competitor gaps in real time',
-      'Plans full monthly editorial calendars automatically',
-      'Recommends the right platforms for your specific audience',
+      'Finds high-ROI keyword clusters across search & social with Semrush',
+      'Analyses competitor content gaps with Ahrefs Site Explorer',
+      'Maps keyword difficulty vs. traffic opportunity to pick winners',
+      'Builds 30-day editorial calendars around winning search intent',
+      'Identifies trending topics via Google Trends before competitors do',
     ],
-    example: 'You tell Postlaa you just launched a fintech app for freelancers. The Strategy Agent researches hashtags, trend gaps on LinkedIn & Reddit, sets 4 content pillars, and delivers a 30-day calendar — in under 5 minutes.',
+    example: 'You launch a fintech app for freelancers. The Keyword Strategist queries Semrush + Ahrefs, surfaces "freelance invoice automation" (low KD, 8,100/mo search volume), and delivers 15 content cluster topics with target keywords — in 3 minutes.',
   },
   {
     icon: '✍️',
     color: '#8B5CF6',
-    title: 'Copywriter Agent',
-    humanRole: 'Content Writer + Social Media Copywriter',
+    title: 'SEO Content Creator',
+    humanRole: 'Content Writer + SEO Copywriter',
     humanCost: '$50,000–$80,000 / year',
+    poweredBy: ['Surfer SEO', 'Frase', 'GPT-4o'],
     whatItDoes: [
-      'Writes platform-native copy (LinkedIn posts ≠ tweets ≠ TikTok scripts)',
-      'Adapts your tone-of-voice across every format',
-      'Creates 3 A/B variants of every post to test messaging',
-      'Rewrites underperforming content based on engagement data',
-      'Generates SEO-optimised blog → social snippet chains',
+      'Writes Surfer SEO-optimised long-form articles that rank page 1',
+      'Uses Frase to generate NLP-based content briefs with full topic coverage',
+      'Creates platform-native social cuts from every blog post automatically',
+      'Generates 3 A/B variants per post to test messaging and CTR',
+      'Writes YouTube scripts, LinkedIn articles, X threads, and TikTok hooks',
     ],
-    example: 'A SaaS launch post gets 3 variants: one pain-first, one outcome-first, one social-proof-first. The agent posts all 3 across time windows and kills the two losers after 48 hours.',
+    example: 'Brief: "Best project management tools for remote teams". Frase outlines 22 required subtopics. Surfer sets the target content score. The agent writes a 2,400-word article scoring 87/100 — plus 6 social posts across platforms — in under 5 minutes.',
   },
   {
-    icon: '🎬',
-    color: '#d82d7e',
-    title: 'Creative Agent',
-    humanRole: 'Graphic Designer + Video Editor',
-    humanCost: '$55,000–$90,000 / year',
-    whatItDoes: [
-      'Generates on-brand social images via Fal.ai, Stability AI, or Google Imagen',
-      'Creates short-form video scripts and AI avatars via HeyGen & Runway ML',
-      'Produces auto-reels and short clips via ReelFarm',
-      'Edits and resizes content for every platform's aspect ratio',
-      'Integrates with Canva & Cloudinary for brand asset management',
-    ],
-    example: 'Your product update gets turned into a 45-second explainer video with AI voiceover (ElevenLabs), brand visuals, and platform-optimised thumbnail — zero human design time.',
-  },
-  {
-    icon: '🚀',
+    icon: '🛠️',
     color: '#FF6719',
-    title: 'Campaign Agent',
-    humanRole: 'Campaign Manager + Growth Marketer',
-    humanCost: '$65,000–$100,000 / year',
+    title: 'Technical Auditor',
+    humanRole: 'Technical SEO Specialist',
+    humanCost: '$55,000–$90,000 / year',
+    poweredBy: ['Screaming Frog', 'Google Search Console', 'PageSpeed API'],
     whatItDoes: [
-      'Designs multi-platform launch campaigns end-to-end',
-      'Runs A/B tests across post copy, visuals, and posting times',
-      'Sequences drip campaigns (Day 1 tease → Day 3 launch → Day 7 proof)',
-      'Triggers automations when milestones hit (10k views = re-boost)',
-      'Coordinates across channels so messaging stays consistent',
+      'Crawls your entire site like Screaming Frog to find broken links & errors',
+      'Audits meta titles, H1 tags, canonical URLs, and schema markup',
+      'Checks Core Web Vitals (LCP, INP, CLS) and mobile page speed',
+      'Reads Google Search Console data for crawl errors and index coverage',
+      'Delivers a prioritised fix list ranked by SEO impact every week',
     ],
-    example: 'A product launch sequence: teaser post 5 days out (X + LinkedIn), launch announcement the day of (7 platforms simultaneously), follow-up with social proof on Day 3, FAQ thread on Day 5. Fully automated.',
+    example: 'Monday morning: audit finds 14 broken internal links, 3 pages with missing meta descriptions, 2 canonical conflicts, and 1 page failing Core Web Vitals. Fix list emailed to your team — zero consultant hours spent.',
   },
   {
-    icon: '📊',
-    color: '#0085FF',
-    title: 'Analytics & ROI Agent',
-    humanRole: 'Data Analyst + Performance Marketer',
-    humanCost: '$70,000–$110,000 / year',
-    whatItDoes: [
-      'Tracks reach, impressions, engagement, CTR, saves, shares per post',
-      'Integrates with Google Analytics, Mixpanel, PostHog & Plausible for conversion data',
-      'Measures which posts drove actual signups, sales, or downloads',
-      'Calculates ROI per campaign and per channel',
-      'Generates weekly performance reports with plain-English recommendations',
-    ],
-    example: 'Your LinkedIn post got 4,200 impressions. The Analytics Agent traces it to 38 landing page visits, 11 trial signups worth ~$209 MRR — and recommends doubling posting frequency on LinkedIn Thursdays.',
-  },
-  {
-    icon: '🔍',
+    icon: '📈',
     color: '#4ade80',
-    title: 'SEO & ASO Agent',
-    humanRole: 'SEO Specialist + App Store Optimiser',
+    title: 'Growth Agent',
+    humanRole: 'Link Builder + PR Outreach Specialist',
     humanCost: '$55,000–$85,000 / year',
+    poweredBy: ['Ahrefs', 'Outreach APIs', 'RSS Feeds'],
     whatItDoes: [
-      'Researches high-traffic hashtags and keywords per platform per post',
-      'Monitors Google Trends to capitalise on breaking topics early',
-      'Optimises YouTube video titles, descriptions and tags for search',
-      'Tracks keyword ranking changes through Google Analytics integration',
-      'Analyses competitor content for SEO/ASO gaps you can exploit',
+      'Scans Ahrefs for competitor backlinks your brand is missing from',
+      'Identifies broken link opportunities on high-DA domains at scale',
+      'Drafts personalised outreach sequences for link acquisition campaigns',
+      'Monitors brand mentions without backlinks for easy link reclamation',
+      'Tracks domain authority changes and new link velocity week-over-week',
     ],
-    example: 'Google Trends spikes on "AI invoice automation". The SEO Agent drafts a LinkedIn article + 3 supporting tweets targeting that keyword cluster — all within 2 hours of the trend hitting.',
+    example: 'Competitor analysis via Ahrefs: they have 40 backlinks from SaaS review sites you\'re absent from. Growth Agent drafts submission content, queues outreach to all 40, and reports back which accepted — fully automated.',
+  },
+  {
+    icon: '🤖',
+    color: '#FC69FF',
+    badge: '🔥 USP',
+    title: 'AI Visibility Agent',
+    humanRole: 'GEO Specialist + AI Brand Monitor',
+    humanCost: '$65,000–$100,000 / year',
+    poweredBy: ['Peec AI', 'Otterly.ai', 'Perplexity'],
+    whatItDoes: [
+      'Tracks how often ChatGPT, Gemini, Perplexity & Copilot mention your brand',
+      'Measures your Share of AI Voice vs. competitors across 6 AI platforms',
+      'Identifies exactly which content gets cited by LLMs — and why',
+      'Optimises pages to earn more AI citations (Generative Engine Optimization)',
+      'Alerts you instantly when competitors gain or lose AI search visibility',
+    ],
+    example: '"What is the best social media scheduling tool?" on ChatGPT. The AI Visibility Agent tracks where Postlaa ranks in that answer via Otterly.ai + Peec AI, identifies which competitor is cited above us, and rewrites our landing page to win the citation — every week.',
+  },
+  {
+    icon: '🔁',
+    color: '#FEBC2E',
+    title: 'Auto Optimizer',
+    humanRole: 'Conversion Rate Optimiser + Content Refresher',
+    humanCost: '$60,000–$95,000 / year',
+    poweredBy: ['Google Analytics', 'Google Search Console', 'GPT-4o'],
+    whatItDoes: [
+      'Revisits every published post every 7–30 days to check for freshness decay',
+      'Rewrites titles and meta descriptions based on real CTR data from GSC',
+      'Updates stale statistics, outdated examples, and broken external links',
+      'Re-publishes refreshed content to signal freshness to search engines',
+      'A/B tests heading variants and kills losers based on click-through data',
+    ],
+    example: 'An article dropped from rank #4 to #11 over 6 months. Auto Optimizer rewrites the H1 (based on GSC CTR data), refreshes 3 outdated statistics, adds 2 new FAQ sections matching recent search queries, and re-submits for indexing — pushing it back to #3.',
   },
 ];
 
@@ -221,27 +228,27 @@ const uniqueIntegrations = [
     ],
   },
   {
-    category: 'CRM & Email Marketing',
-    color: '#FEBC2E',
-    icon: '📧',
+    category: 'SEO Tools',
+    color: '#612BD3',
+    icon: '🔎',
     items: [
-      { name: 'Mailchimp', note: 'Email campaigns' },
-      { name: 'ConvertKit', note: 'Creator email lists' },
-      { name: 'Airtable', note: 'Content database' },
-      { name: 'Contentful', note: 'Headless CMS' },
-      { name: 'Sanity', note: 'Structured content' },
+      { name: 'Semrush',        note: 'Keyword research & audits' },
+      { name: 'Ahrefs',         note: 'Backlinks & competitor gaps' },
+      { name: 'Surfer SEO',     note: 'Content scoring & NLP' },
+      { name: 'Frase',          note: 'AI content briefs' },
+      { name: 'Screaming Frog', note: 'Technical site crawling' },
     ],
   },
   {
-    category: 'AI Research & Insights',
-    color: '#2CA5E0',
-    icon: '🔍',
+    category: 'AI Visibility (GEO)',
+    color: '#FC69FF',
+    icon: '🤖',
     items: [
-      { name: 'Perplexity AI', note: 'Real-time research' },
-      { name: 'NewsAPI', note: 'Trending news feed' },
-      { name: 'YouTube Trending', note: 'Video trends' },
-      { name: 'Google Trends', note: 'Search trends' },
-      { name: 'RSS Feeds', note: 'Content aggregation' },
+      { name: 'Peec AI',       note: 'LLM brand visibility tracking' },
+      { name: 'Otterly.ai',    note: 'AI search cite monitoring' },
+      { name: 'Perplexity',    note: 'Real-time AI research' },
+      { name: 'NewsAPI',       note: 'Trending news feed' },
+      { name: 'Google Trends', note: 'Search trend signals' },
     ],
   },
 ];
@@ -410,8 +417,16 @@ const testimonials = [
 // ─── FAQ ──────────────────────────────────────────────────────────────────────
 const faqs = [
   {
-    q: 'What exactly do the AI Marketing Agents do?',
-    a: 'Think of it as hiring a 6-person marketing team — a strategist, copywriter, designer, campaign manager, analytics analyst, and SEO specialist — all running 24/7 at the cost of your morning coffee. Each agent handles a specific function: the Strategy Agent builds your content calendar, the Copywriter Agent drafts platform-native posts, the Creative Agent generates images and videos, the Campaign Agent runs multi-platform launches with A/B testing, and the Analytics Agent tracks ROI by connecting to Google Analytics, Mixpanel, or PostHog.',
+    q: 'What exactly do the 6 AI Marketing Agents do?',
+    a: 'Each agent is purpose-built with professional-grade tools: (1) Keyword Strategist uses Semrush + Ahrefs to find winning keyword clusters; (2) SEO Content Creator uses Surfer SEO + Frase + GPT-4o to write articles that rank; (3) Technical Auditor uses Screaming Frog + Google Search Console to find and fix site issues; (4) Growth Agent uses Ahrefs + outreach APIs to build backlinks; (5) AI Visibility Agent uses Peec AI + Otterly.ai to track your brand mentions across ChatGPT, Gemini, and Perplexity; (6) Auto Optimizer revisits every piece of content every 7–30 days to refresh and improve CTR.',
+  },
+  {
+    q: 'What tools power each agent? What does it run on?',
+    a: 'Every agent is connected to the industry\'s best tooling — not generic AI. Semrush and Ahrefs for keyword research and competitive analysis. Surfer SEO and Frase for content scoring and NLP briefs. Screaming Frog and Google Search Console for technical auditing. Peec AI and Otterly.ai for AI search visibility tracking across ChatGPT, Perplexity, Gemini, and Copilot. Google Analytics and GSC for CTR-based Auto Optimization. Plus HeyGen, Runway ML, ElevenLabs for creative content, and Mixpanel/PostHog for conversion tracking. Without these, it\'s just a scheduler. With them, it\'s an autonomous marketing company.',
+  },
+  {
+    q: 'What is the AI Visibility Agent and why is it a USP?',
+    a: '50% of organic search traffic is projected to shift to AI search by 2028 (Gartner). The AI Visibility Agent tracks how often ChatGPT, Perplexity, Gemini, and Copilot mention your brand using Peec AI and Otterly.ai. It measures your Share of AI Voice vs. competitors, identifies which content earns citations from LLMs, and optimises your pages for Generative Engine Optimization (GEO). No other social media or scheduling tool does this. It\'s the difference between being invisible in the AI era and being the brand AI recommends.',
   },
   {
     q: 'How does A/B testing work?',
@@ -427,7 +442,7 @@ const faqs = [
   },
   {
     q: 'What integrations does Postlaa have that others don\'t?',
-    a: 'Postlaa is the only scheduling tool with deep AI creation built in: HeyGen (AI avatar videos), Runway ML (AI video), Kling AI, ElevenLabs (voice), Fal.ai + Stability AI + Google Imagen (images), ReelFarm (auto-reels), Perplexity AI (research), Google Trends, NewsAPI, Canva, Cloudinary, Blotato (distribution), Mailchimp, ConvertKit, Substack, Beehiiv, Ghost, Webflow, Shopify Blog, Airtable, Contentful, Sanity, Mixpanel, PostHog, Plausible, and Pipedream — 50+ integrations in total.',
+    a: 'Postlaa is the only scheduling platform connected to: Semrush, Ahrefs, Surfer SEO, Frase, Screaming Frog, Peec AI, Otterly.ai, HeyGen (AI avatar videos), Runway ML, Kling AI, ElevenLabs (voice), Fal.ai + Stability AI + Google Imagen (images), ReelFarm (auto-reels), Canva, Cloudinary, Blotato (distribution), Substack, Beehiiv, Ghost, Webflow, Mixpanel, PostHog, Plausible, and Pipedream — 50+ integrations. None of these are available in Postiz, Buffer, Hootsuite, or Later.',
   },
   {
     q: 'How does the MCP server work for AI coding tools?',
@@ -435,7 +450,7 @@ const faqs = [
   },
   {
     q: 'Is there a free plan?',
-    a: 'Yes. The Free plan gives you 3 channels, 30 posts/month, and basic AI features — no credit card required. Paid plans start at $19/month with a 7-day free trial. At $39/month, you get the full AI Marketing Team with Strategy, Copywriter, Creative, Campaign, and Analytics Agents active.',
+    a: 'Yes. The Free plan gives you 3 channels, 30 posts/month, and basic AI features — no credit card required. Paid plans start at $19/month with a 7-day free trial. At $39/month, you get all 6 AI Marketing Agents: Keyword Strategist, SEO Content Creator, Technical Auditor, Growth Agent, AI Visibility Agent, and Auto Optimizer.',
   },
 ];
 
@@ -498,7 +513,7 @@ export default function LandingPage() {
             A real marketing team — strategy, content, design, campaigns, A/B testing, and ROI tracking — costs $250k–$400k per year in salaries. Postlaa replaces all of it for $39/month.
           </p>
           <p className="text-[15px] text-white/35 max-w-[520px] mx-auto mb-10">
-            6 AI agents. 30+ social channels. 50+ integrations. All working 24/7 for your brand.
+            6 AI agents. 30+ social channels. 50+ integrations. Semrush, Ahrefs, Surfer SEO, Peec AI, and more — all working 24/7.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
             <Link href="/auth" className="flex items-center gap-2 bg-[#612BD3] hover:bg-[#7c3fe8] transition-colors text-white text-[15px] font-semibold px-8 py-3.5 rounded-[10px] w-full sm:w-auto justify-center">
@@ -559,12 +574,12 @@ export default function LandingPage() {
               </div>
               <div className="divide-y divide-[#252525]">
                 {[
-                  { role: 'Marketing Strategist / CMO',    cost: '$80k–$140k', time: '40h/wk' },
-                  { role: 'Content Writer + Copywriter',   cost: '$50k–$80k',  time: '40h/wk' },
-                  { role: 'Graphic Designer + Video Ed.',  cost: '$55k–$90k',  time: '40h/wk' },
-                  { role: 'Campaign & Growth Manager',     cost: '$65k–$100k', time: '40h/wk' },
-                  { role: 'Data Analyst (ROI tracking)',   cost: '$70k–$110k', time: '40h/wk' },
-                  { role: 'SEO / ASO Specialist',          cost: '$55k–$85k',  time: '30h/wk' },
+                  { role: 'CMO + SEO Strategist',              cost: '$80k–$140k', time: '40h/wk' },
+                  { role: 'Content Writer + SEO Copywriter',   cost: '$50k–$80k',  time: '40h/wk' },
+                  { role: 'Technical SEO Specialist',          cost: '$55k–$90k',  time: '40h/wk' },
+                  { role: 'Link Builder + PR Outreach',        cost: '$55k–$85k',  time: '35h/wk' },
+                  { role: 'GEO Specialist + Brand Monitor',    cost: '$65k–$100k', time: '40h/wk' },
+                  { role: 'Conversion Rate Optimiser',         cost: '$60k–$95k',  time: '30h/wk' },
                 ].map((item) => (
                   <div key={item.role} className="flex items-center justify-between px-6 py-3">
                     <div>
@@ -588,12 +603,12 @@ export default function LandingPage() {
               </div>
               <div className="divide-y divide-[#252525]">
                 {[
-                  { role: 'Strategy Agent',        replaces: 'Marketing Strategist', cost: 'Included', avail: '24/7' },
-                  { role: 'Copywriter Agent',       replaces: 'Content Writer',       cost: 'Included', avail: '24/7' },
-                  { role: 'Creative Agent',         replaces: 'Designer + Video Ed.', cost: 'Included', avail: '24/7' },
-                  { role: 'Campaign Agent',         replaces: 'Campaign Manager',     cost: 'Included', avail: '24/7' },
-                  { role: 'Analytics & ROI Agent',  replaces: 'Data Analyst',         cost: 'Included', avail: '24/7' },
-                  { role: 'SEO & ASO Agent',        replaces: 'SEO Specialist',       cost: 'Included', avail: '24/7' },
+                  { role: 'Keyword Strategist',   replaces: 'CMO + SEO Strategist',           cost: 'Included', avail: '24/7' },
+                  { role: 'SEO Content Creator',  replaces: 'Content Writer + Copywriter',    cost: 'Included', avail: '24/7' },
+                  { role: 'Technical Auditor',    replaces: 'Technical SEO Specialist',       cost: 'Included', avail: '24/7' },
+                  { role: 'Growth Agent',         replaces: 'Link Builder + PR Outreach',     cost: 'Included', avail: '24/7' },
+                  { role: '🔥 AI Visibility Agent', replaces: 'GEO Specialist + Brand Monitor', cost: 'Included', avail: '24/7' },
+                  { role: 'Auto Optimizer',       replaces: 'CRO Specialist',                 cost: 'Included', avail: '24/7' },
                 ].map((item) => (
                   <div key={item.role} className="flex items-center justify-between px-6 py-3">
                     <div>
@@ -658,8 +673,8 @@ export default function LandingPage() {
                 full-time hire
               </span>
             </h2>
-            <p className="text-[16px] text-white/50 max-w-[560px] mx-auto">
-              Click any agent to see exactly what it does, what human role it replaces, and a real-world example of it in action.
+            <p className="text-[16px] text-white/50 max-w-[600px] mx-auto">
+              Keyword research with Semrush + Ahrefs. SEO content with Surfer + Frase. Technical audits like Screaming Frog. AI brand tracking with Peec AI + Otterly.ai. Click any agent to see its tool stack, what it replaces, and a real example.
             </p>
           </div>
 
@@ -677,6 +692,9 @@ export default function LandingPage() {
               >
                 <span>{agent.icon}</span>
                 {agent.title}
+                {'badge' in agent && agent.badge && (
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-white/20">{agent.badge as string}</span>
+                )}
               </button>
             ))}
           </div>
@@ -691,10 +709,27 @@ export default function LandingPage() {
                     {agent.icon}
                   </div>
                   <div>
-                    <div className="text-[20px] font-bold" style={{ color: agent.color }}>{agent.title}</div>
+                    <div className="text-[20px] font-bold flex items-center gap-2" style={{ color: agent.color }}>
+                      {agent.title}
+                      {'badge' in agent && agent.badge && (
+                        <span className="text-[11px] font-bold px-2 py-0.5 rounded-full" style={{ background: agent.color + '25', color: agent.color, border: `1px solid ${agent.color}50` }}>{agent.badge as string}</span>
+                      )}
+                    </div>
                     <div className="text-[13px] text-white/40">Replaces: {agent.humanRole}</div>
                   </div>
                 </div>
+                {'poweredBy' in agent && agent.poweredBy && (
+                  <div className="mb-5">
+                    <div className="text-[11px] font-bold text-white/30 uppercase tracking-widest mb-2">Powered by</div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {(agent.poweredBy as string[]).map((tool) => (
+                        <span key={tool} className="text-[11px] font-semibold px-2.5 py-1 rounded-full border" style={{ color: agent.color, borderColor: agent.color + '40', background: agent.color + '12' }}>
+                          {tool}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <div className="mb-4">
                   <div className="text-[12px] font-bold text-white/30 uppercase tracking-widest mb-3">What it does</div>
                   <ul className="space-y-2.5">
@@ -812,7 +847,7 @@ export default function LandingPage() {
           <div className="mt-12 rounded-[16px] px-8 py-6 text-center" style={{ background: 'linear-gradient(135deg, rgba(252,105,255,0.08) 0%, rgba(139,92,246,0.08) 100%)', border: '1px solid rgba(252,105,255,0.2)' }}>
             <p className="text-[15px] text-white/60">
               <span className="text-white font-semibold">Postlaa has the largest integration library of any social scheduling tool.</span>{' '}
-              HeyGen, Runway ML, ElevenLabs, Mixpanel, PostHog, Beehiiv, Ghost, Blotato, Perplexity, and 40+ more — none available in Postiz, Buffer, Hootsuite, or Later.
+              Semrush, Ahrefs, Surfer SEO, Frase, Screaming Frog, Peec AI, Otterly.ai, HeyGen, Runway ML, ElevenLabs, Mixpanel, PostHog, Beehiiv, Ghost, Blotato, and 40+ more integrations — none available in Postiz, Buffer, Hootsuite, or Later.
             </p>
           </div>
         </div>
