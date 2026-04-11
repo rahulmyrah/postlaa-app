@@ -233,11 +233,11 @@ const uniqueIntegrations = [
     icon: '🔎',
     byoa: true,
     items: [
-      { name: 'DataForSEO',          note: 'Default · pay-as-you-go' },
-      { name: 'Semrush',             note: 'Keyword research & audits' },
-      { name: 'Ahrefs',              note: 'Backlinks & competitor gaps' },
+      { name: 'DataForSEO',          note: 'Default · pay-as-you-go',      built: true },
+      { name: 'Semrush',             note: 'Keyword research & audits',     built: true },
+      { name: 'Ahrefs',              note: 'Backlinks & competitor gaps',   built: true },
+      { name: 'Surfer SEO',          note: 'Content score & NLP',           built: true },
       { name: 'Moz Pro',             note: 'DA · rankings · link explorer' },
-      { name: 'Surfer SEO',          note: 'Content score & NLP' },
       { name: 'Frase',               note: 'AI content briefs' },
       { name: 'Screaming Frog',      note: 'Technical site crawler' },
       { name: 'SE Ranking',          note: 'Rank tracking & on-page' },
@@ -255,11 +255,11 @@ const uniqueIntegrations = [
     color: '#FC69FF',
     icon: '🤖',
     items: [
-      { name: 'Peec AI',       note: 'LLM brand visibility tracking' },
-      { name: 'Otterly.ai',    note: 'AI search cite monitoring' },
-      { name: 'Perplexity',    note: 'Real-time AI research' },
-      { name: 'NewsAPI',       note: 'Trending news feed' },
-      { name: 'Google Trends', note: 'Search trend signals' },
+      { name: 'Peec AI',       note: 'LLM brand visibility tracking', built: true },
+      { name: 'Otterly.ai',    note: 'AI search cite monitoring',      built: true },
+      { name: 'Perplexity',    note: 'Real-time AI research',          built: true },
+      { name: 'NewsAPI',       note: 'Trending news feed',             built: true },
+      { name: 'Google Trends', note: 'Search trend signals',           built: true },
     ],
   },
 ];
@@ -837,7 +837,7 @@ export default function LandingPage() {
           </div>
 
           {/* DataForSEO backbone callout */}
-          <div className="mb-8 rounded-[16px] px-7 py-5 flex flex-col md:flex-row items-start md:items-center gap-4" style={{ background: 'linear-gradient(135deg, rgba(97,43,211,0.12) 0%, rgba(139,92,246,0.08) 100%)', border: '1px solid rgba(97,43,211,0.35)' }}>
+          <div className="mb-4 rounded-[16px] px-7 py-5 flex flex-col md:flex-row items-start md:items-center gap-4" style={{ background: 'linear-gradient(135deg, rgba(97,43,211,0.12) 0%, rgba(139,92,246,0.08) 100%)', border: '1px solid rgba(97,43,211,0.35)' }}>
             <div className="flex-shrink-0 w-12 h-12 rounded-[10px] flex items-center justify-center text-xl font-bold text-white" style={{ background: '#612BD3' }}>⚡</div>
             <div>
               <div className="text-[14px] font-bold text-white mb-1">
@@ -847,6 +847,11 @@ export default function LandingPage() {
                 Already paying for Semrush, Ahrefs, Surfer SEO, or Moz? Connect your API key and Postlaa agents will use your existing subscription data. No SEO tool subscriptions at all? DataForSEO is the built-in pay-as-you-go backbone — SERP data · 2.1T backlinks · OnPage crawling · rank tracking — you pay fractions of a cent per query, not $100+/month flat.
               </div>
             </div>
+          </div>
+          {/* Live integration legend */}
+          <div className="mb-8 flex items-center gap-4 text-[12px] text-white/40">
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#4ade80]" /> Live integration — provider built &amp; active</span>
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#555]" /> Coming soon — BYOA connection in progress</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -864,7 +869,12 @@ export default function LandingPage() {
                 <ul className="space-y-2">
                   {cat.items.map((item) => (
                     <li key={item.name} className="flex items-center justify-between gap-2">
-                      <span className="text-[12px] font-medium text-white/80 leading-snug">{item.name}</span>
+                      <span className="flex items-center gap-1.5 text-[12px] font-medium text-white/80 leading-snug">
+                        {'built' in item && item.built && (
+                          <span title="Live integration" className="w-1.5 h-1.5 rounded-full bg-[#4ade80] flex-shrink-0 mt-px" />
+                        )}
+                        {item.name}
+                      </span>
                       <span className="text-[10px] text-white/30 text-right leading-snug flex-shrink-0 max-w-[90px]">{item.note}</span>
                     </li>
                   ))}
@@ -878,6 +888,104 @@ export default function LandingPage() {
               <span className="text-white font-semibold">Postlaa is the platform. You choose the tools.</span>{' '}
               Already have Semrush, Ahrefs, Moz, Surfer SEO, or Screaming Frog? Connect your account and Postlaa agents use your data. No subscriptions? DataForSEO covers everything pay-as-you-go. Either way, you get the same autonomous marketing power — at a fraction of the cost of running these tools separately.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Capabilities at a Glance ── */}
+      <section className="py-[80px] px-6 bg-[#080808]">
+        <div className="max-w-[1200px] mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-[#1A1919] border border-[#4ade80]/40 rounded-full px-4 py-1.5 text-[13px] text-[#4ade80] mb-5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80] inline-block animate-pulse" />
+              Everything is live — not vaporware
+            </div>
+            <h2 className="text-[36px] md:text-[48px] font-bold mb-4" style={{ letterSpacing: '-1.5px' }}>
+              Postlaa capabilities,{' '}
+              <span style={{ background: 'linear-gradient(135deg, #4ade80 0%, #0085FF 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                right now
+              </span>
+            </h2>
+            <p className="text-[15px] text-white/50 max-w-[560px] mx-auto">Every integration listed here is production code. No waitlists. No "coming soon". Connect your API key and it works today.</p>
+          </div>
+
+          {/* Stats row */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-12">
+            {[
+              { value: '52+',   label: 'Live integrations',    sub: 'Production-grade APIs',         color: '#8B5CF6' },
+              { value: '30+',   label: 'Social channels',      sub: 'Native format per platform',    color: '#FC69FF' },
+              { value: '6',     label: 'AI Marketing Agents',  sub: 'Running 24/7 autonomously',     color: '#4ade80' },
+              { value: '2.1T',  label: 'Backlink records',     sub: 'Via DataForSEO backbone',       color: '#FEBC2E' },
+            ].map((s) => (
+              <div key={s.label} className="bg-[#111111] border border-[#252525] rounded-[16px] p-6 text-center hover:border-[#612BD3]/40 transition-colors">
+                <div className="text-[42px] font-bold leading-none mb-1" style={{ color: s.color }}>{s.value}</div>
+                <div className="text-[14px] font-semibold mb-1">{s.label}</div>
+                <div className="text-[12px] text-white/35">{s.sub}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Built providers breakdown */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {[
+              {
+                title: 'SEO Intelligence',
+                color: '#612BD3',
+                icon: '🔎',
+                providers: [
+                  { name: 'DataForSEO',  desc: 'SERP · keywords · backlinks · OnPage · rank tracking' },
+                  { name: 'Semrush',     desc: 'Keyword overview · related · domain organic · backlinks' },
+                  { name: 'Ahrefs',      desc: 'Site explorer · DR · backlinks · content gap · competitors' },
+                  { name: 'Surfer SEO',  desc: 'Content score · NLP guidelines · topic clusters' },
+                ],
+              },
+              {
+                title: 'AI Visibility (GEO)',
+                color: '#FC69FF',
+                icon: '🤖',
+                badge: '🔥 USP',
+                providers: [
+                  { name: 'Peec AI',    desc: 'Visibility · Position · Sentiment across 6 LLM platforms' },
+                  { name: 'Otterly.ai', desc: 'Citation tracking · Share of AI Voice · brand monitoring' },
+                  { name: 'Perplexity', desc: 'Real-time AI web research for content & trends' },
+                  { name: 'NewsAPI',    desc: 'Breaking news & trending topic signals' },
+                ],
+              },
+              {
+                title: 'AI Creatives',
+                color: '#d82d7e',
+                icon: '🎬',
+                providers: [
+                  { name: 'HeyGen',       desc: 'AI avatar videos in 120+ languages' },
+                  { name: 'Runway ML',    desc: 'Text-to-video & image-to-video generation' },
+                  { name: 'ElevenLabs',   desc: 'Ultra-realistic voiceover in any language' },
+                  { name: 'Fal.ai',       desc: 'Ultra-fast image generation · LoRA support' },
+                ],
+              },
+            ].map((group) => (
+              <div key={group.title} className="bg-[#111111] border border-[#252525] rounded-[18px] overflow-hidden hover:border-[#612BD3]/40 transition-colors">
+                <div className="px-5 py-4 border-b border-[#252525] flex items-center justify-between" style={{ background: (group.color) + '10' }}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[20px]">{group.icon}</span>
+                    <span className="text-[13px] font-bold" style={{ color: group.color }}>{group.title}</span>
+                  </div>
+                  {group.badge && (
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ color: group.color, background: group.color + '18', border: `1px solid ${group.color}35` }}>{group.badge}</span>
+                  )}
+                </div>
+                <ul className="divide-y divide-[#1a1a1a]">
+                  {group.providers.map((p) => (
+                    <li key={p.name} className="px-5 py-3 flex items-start gap-3">
+                      <span className="mt-0.5 w-2 h-2 rounded-full bg-[#4ade80] flex-shrink-0" />
+                      <div>
+                        <div className="text-[13px] font-semibold text-white">{p.name}</div>
+                        <div className="text-[11px] text-white/40 mt-0.5">{p.desc}</div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </section>

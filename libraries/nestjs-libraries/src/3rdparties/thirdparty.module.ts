@@ -55,6 +55,14 @@ import { WeChatProvider } from '@gitroom/nestjs-libraries/3rdparties/wechat/wech
 // Knowledge
 import { GoogleDocsProvider } from '@gitroom/nestjs-libraries/3rdparties/googledocs/googledocs.provider';
 import { AirtableProvider } from '@gitroom/nestjs-libraries/3rdparties/airtable/airtable.provider';
+// SEO
+import { DataForSeoProvider } from '@gitroom/nestjs-libraries/3rdparties/dataforseo/dataforseo.provider';
+import { SemrushProvider } from '@gitroom/nestjs-libraries/3rdparties/semrush/semrush.provider';
+import { AhrefsProvider } from '@gitroom/nestjs-libraries/3rdparties/ahrefs/ahrefs.provider';
+import { SurferSeoProvider } from '@gitroom/nestjs-libraries/3rdparties/surferseo/surferseo.provider';
+// AI Visibility (GEO)
+import { PeecAiProvider } from '@gitroom/nestjs-libraries/3rdparties/peecai/peecai.provider';
+import { OtterlyProvider } from '@gitroom/nestjs-libraries/3rdparties/otterly/otterly.provider';
 import { ThirdPartyManager } from '@gitroom/nestjs-libraries/3rdparties/thirdparty.manager';
 
 @Global()
@@ -116,6 +124,14 @@ import { ThirdPartyManager } from '@gitroom/nestjs-libraries/3rdparties/thirdpar
     // Knowledge
     GoogleDocsProvider,
     AirtableProvider,
+    // SEO
+    DataForSeoProvider,
+    SemrushProvider,
+    AhrefsProvider,
+    SurferSeoProvider,
+    // AI Visibility (GEO)
+    PeecAiProvider,
+    OtterlyProvider,
     ThirdPartyManager,
   ],
   get exports() {
