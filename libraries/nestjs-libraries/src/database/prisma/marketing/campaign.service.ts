@@ -37,4 +37,8 @@ export class CampaignService {
   addResearchRun(campaignId: string, agentType: string, findings: object) {
     return this._repo.addResearchRun(campaignId, agentType, findings);
   }
+
+  acceptPlan(campaignId: string, feedback?: string) {
+    return this._repo.acceptPlan(campaignId, feedback);
+  }
 }

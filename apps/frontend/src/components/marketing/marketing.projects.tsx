@@ -388,6 +388,396 @@ const agentLabels: Record<string, { label: string; icon: string }> = {
   ai_visibility: { label: 'AI Visibility Agent', icon: '🤖' },
 };
 
+// ─── Content Plan Modal ───────────────────────────────────────────────────────
+
+const platformConfig: Record<string, { label: string; badge: string }> = {
+  LinkedIn: { label: '💼 LinkedIn', badge: 'bg-blue-600/15 text-blue-400' },
+  'Twitter/X': { label: '𝕏 Twitter/X', badge: 'bg-gray-600/15 text-gray-300' },
+  Instagram: { label: '📸 Instagram', badge: 'bg-pink-600/15 text-pink-400' },
+  Facebook: { label: '👥 Facebook', badge: 'bg-blue-700/15 text-blue-500' },
+};
+
+const ContentPlanModal: FC<{
+  campaign: Campaign;
+  projectId: string;
+  onAccepted: () => void;
+}> = ({ campaign, projectId, onAccepted }) => {
+  const fetch = useFetch();
+  const toaster = useToaster();
+  const modal = useModals();
+  const [activeTab, setActiveTab] = useState<
+    'briefs' | 'social' | 'calendar' | 'research'
+  >('briefs');
+  const [feedback, setFeedback] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [expandedResearch, setExpandedResearch] = useState<string | null>(null);
+
+  const plan = campaign.contentPlan as any;
+
+  const handleAccept = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `/marketing/projects/${projectId}/campaigns/${campaign.id}/accept`,
+        {
+          method: 'POST',
+          body: JSON.stringify({ feedback: feedback.trim() || undefined }),
+        }
+      );
+      if (!res.ok) throw new Error();
+      toaster.show(
+        '✓ Plan approved! Your content calendar is ready to execute.',
+        'success'
+      );
+      onAccepted();
+      modal.closeCurrent();
+    } catch {
+      toaster.show('Failed to accept plan. Please try again.', 'warning');
+    } finally {
+      setLoading(false);
+    }
+  }, [campaign.id, projectId, feedback, fetch, toaster, onAccepted, modal]);
+
+  const tabs = [
+    {
+      key: 'briefs',
+      label: '📄 Content Briefs',
+      count: plan?.contentBriefs?.length,
+    },
+    {
+      key: 'social',
+      label: '📱 Social Posts',
+      count: plan?.socialPosts?.length,
+    },
+    { key: 'calendar', label: '📅 Calendar' },
+    { key: 'research', label: '🔬 Research' },
+  ] as const;
+
+  return (
+    <div className="flex flex-col" style={{ minHeight: '560px' }}>
+      {/* Tabs */}
+      <div className="flex border-b border-[var(--new-sep)] -mx-8 px-8 mb-4">
+        {tabs.map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setActiveTab(tab.key)}
+            className={clsx(
+              'px-4 py-2.5 text-sm font-medium transition-colors border-b-2 -mb-px whitespace-nowrap',
+              activeTab === tab.key
+                ? 'border-[var(--new-btn-primary)] text-[var(--new-btn-primary)]'
+                : 'border-transparent text-[var(--new-textItemBlur)] hover:text-[rgb(var(--new-textColor))]'
+            )}
+          >
+            {tab.label}
+            {'count' in tab && tab.count !== undefined
+              ? ` (${tab.count})`
+              : ''}
+          </button>
+        ))}
+      </div>
+
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto flex flex-col gap-4 pb-4">
+        {/* ── Content Briefs ── */}
+        {activeTab === 'briefs' && (
+          <>
+            {plan?.summary && (
+              <div className="bg-[var(--new-btn-primary)]/8 border border-[var(--new-btn-primary)]/30 rounded-xl p-4">
+                <p className="text-sm text-[rgb(var(--new-textColor))] leading-relaxed">
+                  {plan.summary}
+                </p>
+              </div>
+            )}
+
+            {(plan?.contentBriefs ?? []).map((brief: any, i: number) => (
+              <div
+                key={i}
+                className="bg-[var(--new-bgColor)] border border-[var(--new-sep)] rounded-xl p-4 flex flex-col gap-3"
+              >
+                <div className="flex justify-between items-start gap-3">
+                  <h3 className="font-semibold text-[rgb(var(--new-textColor))] text-sm leading-snug flex-1">
+                    {brief.title}
+                  </h3>
+                  {brief.estimatedTrafficPotential && (
+                    <span className="shrink-0 text-xs px-2 py-0.5 rounded bg-[var(--new-btn-primary)]/10 text-[var(--new-btn-primary)]">
+                      {brief.estimatedTrafficPotential}
+                    </span>
+                  )}
+                </div>
+                <div className="flex gap-3 text-xs text-[var(--new-textItemBlur)]">
+                  <span>
+                    🎯{' '}
+                    <strong className="text-[rgb(var(--new-textColor))]">
+                      {brief.targetKeyword}
+                    </strong>
+                  </span>
+                  <span>·</span>
+                  <span>{Number(brief.wordCount).toLocaleString()} words</span>
+                </div>
+                {brief.outline?.length > 0 && (
+                  <div>
+                    <p className="text-xs text-[var(--new-textItemBlur)] uppercase tracking-wider mb-1.5">
+                      Outline
+                    </p>
+                    <ul className="flex flex-col gap-1">
+                      {brief.outline.map((section: string, j: number) => (
+                        <li
+                          key={j}
+                          className="flex items-start gap-1.5 text-sm text-[rgb(var(--new-textColor))]"
+                        >
+                          <span className="text-[var(--new-textItemBlur)] mt-0.5 shrink-0">
+                            →
+                          </span>
+                          <span>{section}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {brief.metaDescription && (
+                  <p className="text-xs text-[var(--new-textItemBlur)] italic border-t border-[var(--new-sep)] pt-2">
+                    Meta: {brief.metaDescription}
+                  </p>
+                )}
+              </div>
+            ))}
+
+            {plan?.titleFormulas?.length > 0 && (
+              <div className="bg-[var(--new-bgColor)] border border-[var(--new-sep)] rounded-xl p-4 flex flex-col gap-2">
+                <p className="text-xs text-[var(--new-textItemBlur)] uppercase tracking-wider">
+                  Title Formulas
+                </p>
+                {plan.titleFormulas.map((formula: string, i: number) => (
+                  <div
+                    key={i}
+                    className="flex items-start gap-2 text-sm text-[rgb(var(--new-textColor))]"
+                  >
+                    <span className="text-[var(--new-btn-primary)] shrink-0">
+                      {i + 1}.
+                    </span>
+                    <span>{formula}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {!plan?.contentBriefs?.length && (
+              <p className="text-sm text-[var(--new-textItemBlur)] text-center py-8">
+                No content briefs generated yet.
+              </p>
+            )}
+          </>
+        )}
+
+        {/* ── Social Posts ── */}
+        {activeTab === 'social' && (
+          <>
+            {Object.entries(
+              (plan?.socialPosts ?? []).reduce(
+                (acc: Record<string, any[]>, post: any) => {
+                  if (!acc[post.platform]) acc[post.platform] = [];
+                  acc[post.platform].push(post);
+                  return acc;
+                },
+                {}
+              )
+            ).map(([platform, posts]) => (
+              <div key={platform} className="flex flex-col gap-3">
+                <span
+                  className={clsx(
+                    'self-start text-xs px-2.5 py-1 rounded-full font-medium',
+                    platformConfig[platform]?.badge ??
+                      'bg-gray-500/20 text-gray-400'
+                  )}
+                >
+                  {platformConfig[platform]?.label ?? platform}
+                </span>
+                {(posts as any[]).map((post: any, i: number) => (
+                  <div
+                    key={i}
+                    className="bg-[var(--new-bgColor)] border border-[var(--new-sep)] rounded-xl p-4 flex flex-col gap-2.5"
+                  >
+                    <p className="text-sm font-semibold text-[rgb(var(--new-textColor))] leading-snug">
+                      {post.hook}
+                    </p>
+                    <p className="text-sm text-[var(--new-textItemBlur)] leading-relaxed">
+                      {post.content}
+                    </p>
+                    <div className="flex items-center gap-2 pt-2 border-t border-[var(--new-sep)]">
+                      <span className="text-xs text-[var(--new-btn-primary)]">
+                        → {post.cta}
+                      </span>
+                      {post.targetKeyword && (
+                        <span className="ml-auto text-xs text-[var(--new-textItemBlur)]">
+                          #{post.targetKeyword}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
+
+            {!plan?.socialPosts?.length && (
+              <p className="text-sm text-[var(--new-textItemBlur)] text-center py-8">
+                No social posts generated yet.
+              </p>
+            )}
+          </>
+        )}
+
+        {/* ── Calendar ── */}
+        {activeTab === 'calendar' && (
+          <>
+            {plan?.contentCalendar?.length > 0 ? (
+              <div className="rounded-xl overflow-hidden border border-[var(--new-sep)]">
+                <table className="w-full text-sm">
+                  <thead className="bg-[var(--new-bgColor)]">
+                    <tr className="text-xs text-[var(--new-textItemBlur)] uppercase tracking-wider">
+                      <th className="text-left px-4 py-3">Week</th>
+                      <th className="text-left px-4 py-3">Title</th>
+                      <th className="text-left px-4 py-3">Channel</th>
+                      <th className="text-left px-4 py-3">Keyword</th>
+                      <th className="text-left px-4 py-3">Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {plan.contentCalendar.map((item: any, i: number) => (
+                      <tr
+                        key={i}
+                        className={clsx(
+                          'border-t border-[var(--new-sep)]',
+                          i % 2 === 0
+                            ? 'bg-[var(--new-bgColorInner)]'
+                            : 'bg-[var(--new-bgColor)]'
+                        )}
+                      >
+                        <td className="px-4 py-3 font-semibold text-[var(--new-btn-primary)]">
+                          W{item.week}
+                        </td>
+                        <td className="px-4 py-3 text-[rgb(var(--new-textColor))]">
+                          {item.title}
+                        </td>
+                        <td className="px-4 py-3 text-[var(--new-textItemBlur)]">
+                          {item.channel}
+                        </td>
+                        <td className="px-4 py-3 text-[var(--new-textItemBlur)]">
+                          {item.primaryKeyword}
+                        </td>
+                        <td className="px-4 py-3 text-[var(--new-textItemBlur)]">
+                          {item.contentType}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p className="text-sm text-[var(--new-textItemBlur)] text-center py-8">
+                No content calendar generated yet.
+              </p>
+            )}
+          </>
+        )}
+
+        {/* ── Research Findings ── */}
+        {activeTab === 'research' && (
+          <>
+            {(campaign.researchRuns ?? []).length > 0 ? (
+              <div className="flex flex-col rounded-xl overflow-hidden border border-[var(--new-sep)]">
+                {(campaign.researchRuns ?? []).map((run) => {
+                  const meta = agentLabels[run.agentType] ?? {
+                    label: run.agentType,
+                    icon: '🤖',
+                  };
+                  const isOpen = expandedResearch === run.id;
+                  return (
+                    <div
+                      key={run.id}
+                      className="border-b border-[var(--new-sep)] last:border-0"
+                    >
+                      <button
+                        className="w-full flex justify-between items-center px-4 py-3 text-sm hover:bg-[var(--new-btn-simple)]/30 transition-colors text-left"
+                        onClick={() =>
+                          setExpandedResearch(isOpen ? null : run.id)
+                        }
+                      >
+                        <span className="flex items-center gap-2">
+                          <span>{meta.icon}</span>
+                          <span className="text-[rgb(var(--new-textColor))]">
+                            {meta.label}
+                          </span>
+                        </span>
+                        <span className="text-[var(--new-textItemBlur)] text-xs">
+                          {isOpen ? '▲' : '▼'}
+                        </span>
+                      </button>
+                      {isOpen && (
+                        <div className="px-4 pb-3">
+                          <pre className="text-xs text-[var(--new-textItemBlur)] bg-black/20 rounded-lg p-3 overflow-auto max-h-60 whitespace-pre-wrap">
+                            {JSON.stringify(run.findings, null, 2)}
+                          </pre>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-sm text-[var(--new-textItemBlur)] text-center py-8">
+                No research data available.
+              </p>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* Footer — only shown when plan is awaiting human acceptance */}
+      {campaign.status === 'ACTIVE' && (
+        <div className="border-t border-[var(--new-sep)] pt-4 mt-2 flex flex-col gap-3">
+          <Textarea
+            disableForm
+            name="feedback"
+            label="Notes for your team (optional)"
+            placeholder="e.g. Prioritise LinkedIn this month, adjust tone for US audience, skip Week 3 travel content…"
+            value={feedback}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              setFeedback(e.target.value)
+            }
+          />
+          <div className="flex gap-3">
+            <Button
+              secondary
+              className="flex-1"
+              onClick={() => modal.closeCurrent()}
+            >
+              Review Later
+            </Button>
+            <Button
+              className="flex-1"
+              loading={loading}
+              onClick={handleAccept}
+            >
+              ✓ Accept & Approve Plan
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {campaign.status === 'COMPLETED' && (
+        <div className="border-t border-[var(--new-sep)] pt-4 mt-2 flex items-center justify-between">
+          <span className="text-sm text-green-400 flex items-center gap-1.5">
+            ✓ Plan approved — ready to schedule
+          </span>
+          <Button secondary onClick={() => modal.closeCurrent()}>
+            Close
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+};
+
 // ─── Campaign Run Card ────────────────────────────────────────────────────────
 
 const TOTAL_AGENTS = 6;
@@ -408,6 +798,7 @@ const CampaignRunCard: FC<{
 }> = ({ campaign, projectId, onRefresh }) => {
   const fetch = useFetch();
   const toaster = useToaster();
+  const modal = useModals();
   const [expanded, setExpanded] = useState<string | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -415,6 +806,24 @@ const CampaignRunCard: FC<{
   const hasResults = (campaign.researchRuns?.length ?? 0) > 0;
   const doneCount = campaign.researchRuns?.length ?? 0;
   const currentStep = agentSteps[Math.min(doneCount, TOTAL_AGENTS - 1)];
+  const hasPlan =
+    !!campaign.contentPlan &&
+    (campaign.status === 'ACTIVE' || campaign.status === 'COMPLETED');
+
+  const openPlanModal = useCallback(() => {
+    modal.openModal({
+      title: `${campaign.name} — Content Plan Review`,
+      children: (
+        <ContentPlanModal
+          campaign={campaign}
+          projectId={projectId}
+          onAccepted={() => onRefresh()}
+        />
+      ),
+      size: 900,
+      height: '88vh',
+    });
+  }, [campaign, projectId, modal, onRefresh]);
 
   // Auto-poll every 5s while the campaign is RESEARCHING
   useEffect(() => {
@@ -460,7 +869,10 @@ const CampaignRunCard: FC<{
       prevStatusRef.current === 'RESEARCHING' &&
       campaign.status === 'ACTIVE'
     ) {
-      toaster.show('AI team done! Your campaign plan is ready.', 'success');
+      toaster.show(
+        'AI team done! Click "Review Plan" to inspect and approve.',
+        'success'
+      );
     }
     if (
       prevStatusRef.current === 'RESEARCHING' &&
@@ -484,11 +896,21 @@ const CampaignRunCard: FC<{
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <StatusBadge status={campaign.status} />
+          {hasPlan && (
+            <Button
+              onClick={openPlanModal}
+              secondary={campaign.status === 'COMPLETED'}
+              className="text-xs !py-1 !px-3"
+            >
+              {campaign.status === 'COMPLETED' ? '✓ View Plan' : '📋 Review Plan'}
+            </Button>
+          )}
           <Button
             loading={isRunning}
             onClick={handleRun}
             disabled={isRunning}
             className="text-xs !py-1 !px-3"
+            secondary={hasPlan}
           >
             {isRunning
               ? 'Running…'

@@ -158,6 +158,23 @@ export class MarketingController {
     return { campaignId: id, status: 'RESEARCHING', message: 'AI team started' };
   }
 
+  @Post('/projects/:projectId/campaigns/:id/accept')
+  async acceptCampaignPlan(
+    @GetOrgFromRequest() org: Organization,
+    @Param('projectId') projectId: string,
+    @Param('id') id: string,
+    @Body() body: { feedback?: string }
+  ) {
+    const project = await this._projectService.getById(org.id, projectId);
+    if (!project) throw new NotFoundException('Project not found');
+    const campaign = await this._campaignService.getById(projectId, id);
+    if (!campaign) throw new NotFoundException('Campaign not found');
+    if (campaign.status !== 'ACTIVE') {
+      throw new HttpException('Plan can only be accepted when campaign is ACTIVE', 400);
+    }
+    return this._campaignService.acceptPlan(campaign.id, body.feedback);
+  }
+
   @Delete('/projects/:projectId/campaigns/:id')
   async deleteCampaign(
     @GetOrgFromRequest() org: Organization,

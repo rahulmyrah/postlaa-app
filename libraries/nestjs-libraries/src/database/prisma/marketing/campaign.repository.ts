@@ -76,4 +76,21 @@ export class CampaignRepository {
       data: { campaignId, agentType, findings },
     });
   }
+
+  async acceptPlan(id: string, feedback?: string) {
+    const campaign = await this._campaign.model.campaign.findUnique({
+      where: { id },
+    });
+    return this._campaign.model.campaign.update({
+      where: { id },
+      data: {
+        status: 'COMPLETED',
+        brief: {
+          ...(campaign?.brief as Record<string, unknown> ?? {}),
+          acceptedAt: new Date().toISOString(),
+          ...(feedback ? { humanFeedback: feedback } : {}),
+        },
+      },
+    });
+  }
 }
