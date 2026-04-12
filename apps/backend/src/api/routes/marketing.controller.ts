@@ -130,23 +130,32 @@ export class MarketingController {
     const campaign = await this._campaignService.getById(projectId, id);
     if (!campaign) throw new NotFoundException('Campaign not found');
 
-    return this._orchestrator.run({
-      orgId: org.id,
-      projectId,
-      campaignId: id,
-      project: {
-        url: project.url,
-        niche: project.niche,
-        competitors: (project as any).competitors ?? null,
-        targetAudience: (project as any).targetAudience ?? null,
-        brandVoice: (project as any).brandVoice ?? null,
-        goals: (project as any).goals ?? null,
-      },
-      campaign: {
-        name: campaign.name,
-        goal: campaign.goal ?? '',
-      },
-    });
+    // Fire-and-forget — the orchestrator updates the DB progressively.
+    // The client polls GET .../campaigns/:id every 5s to track progress.
+    this._orchestrator
+      .run({
+        orgId: org.id,
+        projectId,
+        campaignId: id,
+        project: {
+          url: project.url,
+          niche: project.niche,
+          competitors: (project as any).competitors ?? null,
+          targetAudience: (project as any).targetAudience ?? null,
+          brandVoice: (project as any).brandVoice ?? null,
+          goals: (project as any).goals ?? null,
+        },
+        campaign: {
+          name: campaign.name,
+          goal: campaign.goal ?? '',
+        },
+      })
+      .catch(() => {
+        // Errors are handled inside the orchestrator; swallow here to avoid
+        // unhandled promise rejection crashing the process.
+      });
+
+    return { campaignId: id, status: 'RESEARCHING', message: 'AI team started' };
   }
 
   @Delete('/projects/:projectId/campaigns/:id')

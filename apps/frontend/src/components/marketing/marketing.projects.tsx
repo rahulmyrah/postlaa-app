@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
@@ -390,6 +390,17 @@ const agentLabels: Record<string, { label: string; icon: string }> = {
 
 // ─── Campaign Run Card ────────────────────────────────────────────────────────
 
+const TOTAL_AGENTS = 6;
+
+const agentSteps = [
+  'Keyword research',
+  'Technical audit',
+  'Growth intelligence',
+  'Optimization plan',
+  'Content creation',
+  'AI visibility',
+];
+
 const CampaignRunCard: FC<{
   campaign: Campaign;
   projectId: string;
@@ -397,32 +408,68 @@ const CampaignRunCard: FC<{
 }> = ({ campaign, projectId, onRefresh }) => {
   const fetch = useFetch();
   const toaster = useToaster();
-  const [running, setRunning] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const isRunning = campaign.status === 'RESEARCHING';
+  const hasResults = (campaign.researchRuns?.length ?? 0) > 0;
+  const doneCount = campaign.researchRuns?.length ?? 0;
+  const currentStep = agentSteps[Math.min(doneCount, TOTAL_AGENTS - 1)];
+
+  // Auto-poll every 5s while the campaign is RESEARCHING
+  useEffect(() => {
+    if (isRunning) {
+      pollRef.current = setInterval(() => {
+        onRefresh();
+      }, 5000);
+    } else {
+      if (pollRef.current) {
+        clearInterval(pollRef.current);
+        pollRef.current = null;
+      }
+    }
+    return () => {
+      if (pollRef.current) {
+        clearInterval(pollRef.current);
+        pollRef.current = null;
+      }
+    };
+  }, [isRunning, onRefresh]);
 
   const handleRun = useCallback(async () => {
-    setRunning(true);
     try {
       const res = await fetch(
         `/marketing/projects/${projectId}/campaigns/${campaign.id}/run`,
         { method: 'POST' }
       );
       if (!res.ok) throw new Error();
-      await onRefresh();
-      toaster.show('AI team completed! Your campaign plan is ready.', 'success');
+      // Status is now RESEARCHING on the server — refresh to pick it up
+      onRefresh();
     } catch {
       toaster.show(
-        'Failed to run AI team. Check your connected integrations.',
+        'Failed to start AI team. Check your connected integrations.',
         'warning'
       );
-    } finally {
-      setRunning(false);
     }
   }, [campaign.id, projectId, fetch, onRefresh, toaster]);
 
-  const isRunning = running || campaign.status === 'RESEARCHING';
-  const hasResults =
-    campaign.researchRuns && campaign.researchRuns.length > 0;
+  // Show a toast when run completes (status flips away from RESEARCHING)
+  const prevStatusRef = useRef(campaign.status);
+  useEffect(() => {
+    if (
+      prevStatusRef.current === 'RESEARCHING' &&
+      campaign.status === 'ACTIVE'
+    ) {
+      toaster.show('AI team done! Your campaign plan is ready.', 'success');
+    }
+    if (
+      prevStatusRef.current === 'RESEARCHING' &&
+      campaign.status === 'PAUSED'
+    ) {
+      toaster.show('AI team run failed. Check your integrations.', 'warning');
+    }
+    prevStatusRef.current = campaign.status;
+  }, [campaign.status, toaster]);
 
   return (
     <div className="bg-[var(--new-bgColorInner)] border border-[var(--new-border)] rounded-xl overflow-hidden">
@@ -440,29 +487,43 @@ const CampaignRunCard: FC<{
           <Button
             loading={isRunning}
             onClick={handleRun}
+            disabled={isRunning}
             className="text-xs !py-1 !px-3"
           >
             {isRunning
               ? 'Running…'
               : hasResults
-              ? '↺ Re-run AI Team'
+              ? '↺ Re-run'
               : '▶ Run AI Team'}
           </Button>
         </div>
       </div>
 
       {isRunning && (
-        <div className="px-4 pb-3">
-          <div className="bg-[var(--new-btn-primary)]/10 rounded-lg p-3">
-            <p className="text-xs text-[var(--new-btn-primary)] animate-pulse">
-              6 agents working… Keyword research → Technical audit → Growth
-              intel → Optimization → Content plan → AI visibility
-            </p>
+        <div className="px-4 pb-4">
+          {/* Progress bar */}
+          <div className="flex items-center gap-3 mb-2">
+            <div className="flex-1 h-1.5 bg-[var(--new-sep)] rounded-full overflow-hidden">
+              <div
+                className="h-full bg-[var(--new-btn-primary)] rounded-full transition-all duration-700"
+                style={{
+                  width: `${Math.max(8, (doneCount / TOTAL_AGENTS) * 100)}%`,
+                }}
+              />
+            </div>
+            <span className="text-xs text-[var(--new-textItemBlur)] shrink-0">
+              {doneCount}/{TOTAL_AGENTS}
+            </span>
           </div>
+          <p className="text-xs text-[var(--new-btn-primary)] animate-pulse">
+            {doneCount < TOTAL_AGENTS
+              ? `Running: ${currentStep}…`
+              : 'Finalising plan…'}
+          </p>
         </div>
       )}
 
-      {hasResults && !isRunning && (
+      {hasResults && (
         <div className="border-t border-[var(--new-sep)]">
           {campaign.researchRuns!.map((run) => {
             const meta = agentLabels[run.agentType] ?? {

@@ -55,6 +55,7 @@ export class MarketingTeamOrchestrator {
   ) {}
 
   async run(input: MarketingTeamRunInput): Promise<MarketingTeamRunResult> {
+    try {
     // 1. Load and decrypt all connected API keys for this org
     const apiKeys = await this.loadApiKeys(input.orgId);
 
@@ -186,6 +187,13 @@ export class MarketingTeamOrchestrator {
     };
 
     return result;
+    } catch (err) {
+      // Mark campaign as PAUSED so the UI knows it failed and allows re-run
+      await this._campaignService
+        .update(input.projectId, input.campaignId, { status: 'PAUSED' })
+        .catch(() => void 0);
+      throw err;
+    }
   }
 
   /** Load all connected third-party API keys for an org, decrypted. */
